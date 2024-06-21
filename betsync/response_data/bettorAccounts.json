@@ -1,0 +1,40 @@
+[
+  {
+    "id": "BACT_697dead5a75d4c7e910b07c97fe6f8c6",
+    "bettor": "BTTR_13bfc54c066e442394cd5ffa0d8853ca",
+    "book": {
+      "id": "BOOK_Rf7xRhS7TKQUl94Xkt5w",
+      "name": "Fanduel",
+      "abbr": "fd"
+    },
+    "bookRegion": {
+      "id": "BRGN_ab5628fa79344c39bce8fec0f17fbdcc",
+      "name": "New York",
+      "abbr": "ny",
+      "status": "active",
+      "country": "United States",
+      "sdkRequired": true,
+      "mobileOnly": true
+    },
+    "verified": true,
+    "access": true,
+    "paused": false,
+    "betRefreshRequested": "2024-06-20T15:03:03.442219Z",
+    "latestRefreshResponse": {
+      "id": "RRES_24a1c61272494b199e6db5438491d7b7",
+      "timeCreated": "2024-06-20T15:03:25.556479Z",
+      "status": 200,
+      "detail": null,
+      "requestId": "9c8e3444ef8b4e76a3d5690f8c61d513",
+      "type": "verify"
+    },
+    "latestRefreshRequestId": "9c8e3444ef8b4e76a3d5690f8c61d513",
+    "balance": 0,
+    "timeCreated": "2024-06-20T15:03:03.156127Z",
+    "missingBets": 0,
+    "isUnverifiable": false,
+    "timeUnverified": null,
+    "TFA": false,
+    "refreshInProgress": false
+  }
+]
