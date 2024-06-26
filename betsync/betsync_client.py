@@ -1,21 +1,11 @@
 import json
-import os
 import requests
-from dotenv import load_dotenv
-
-load_dotenv()
-PUBLIC_API_KEY = os.getenv("SHARPSPORTS_PUBLIC_API_KEY")
-PRIVATE_API_KEY = os.getenv("SHARPSPORTS_PRIVATE_API_KEY")
-NICO_INTERNAL_ID = "ncolosso"
-HENRY_INTERNAL_ID = "harmistead"
-FANDUEL_NY_BOOK_ID = "BRGN_ab5628fa79344c39bce8fec0f17fbdcc"
 
 
 class BetSyncClient:
 
-    def __init__(self, internal_id, book_region_id, public_api_key, private_api_key):
+    def __init__(self, internal_id, public_api_key, private_api_key):
         self.internal_id = internal_id
-        self.book_region_id = book_region_id
         self.public_api_key = public_api_key
         self.private_api_key = private_api_key
         self.extension_auth_token = ""
@@ -52,7 +42,7 @@ class BetSyncClient:
         if response.status_code != 200:
             print(f"{response.status_code} - {response.text}")
             return
-        return response.text
+        return json.loads(response.text)
 
     def get_book_region_detail(self, book_id):
         url = self.base_url + "/bookRegions" + book_id
@@ -61,7 +51,7 @@ class BetSyncClient:
         if response.status_code != 200:
             print(f"{response.status_code} - {response.text}")
             return
-        return response.text
+        return json.loads(response.text)
 
     def create_context(self):
         url = self.base_url + "/context"
@@ -88,16 +78,16 @@ class BetSyncClient:
         if response.status_code != 200 and response.status_code != 201:
             print(f"{response.status_code} - {response.text}")
             return
-        return response.text
-
+        return json.loads(response.text)
+    
     def get_bettor_accounts(self):
-        url = self.base_url + "/bettorAccounts"
+        url = self.base_url + "/bettors/" + self.internal_id + "/bettorAccounts"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
             print(f"{response.status_code} - {response.text}")
             return
-        return response.text
+        return json.loads(response.text)
 
     def get_betslips_by_bettor_account(self, bettor_account_id):
         url = self.base_url + "/bettorAccounts/" + bettor_account_id + "/betSlips"
@@ -106,4 +96,4 @@ class BetSyncClient:
         if response.status_code != 200 and response.status_code != 201:
             print(f"{response.status_code} - {response.text}")
             return
-        return response.text
+        return json.loads(response.text)
