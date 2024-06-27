@@ -1,3 +1,9 @@
+"""
+Create a custom URL for a given sports book and user for linking an account
+
+Usage: 
+    python3 get_custom_url.py [user_id (default: ncolosso)] [sportsbook: fanduel/draftkings/underdog (default:fanduel)]
+"""
 import os
 import sys
 from dotenv import load_dotenv

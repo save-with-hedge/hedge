@@ -1,10 +1,17 @@
+"""
+Fetch a user's bet history from Sharp Sports and export the formatted bets to a csv file.
+Csv files are written to the hedge/out/ folder and named bet_history_[user_id].csv
+
+Usage:
+    python3 export_bets.py [user_id (default: ncolosso)]
+"""
 import csv
 import os
 import sys
 from dotenv import load_dotenv
 
 from betsync_client import BetSyncClient
-from constants import INTERNAL_ID_NICO
+from constants import INTERNAL_ID_NICO, OUTPUT_FOLDER, BET_HISTORY_FILE_PREFIX
 
 load_dotenv()
 
@@ -59,7 +66,7 @@ def export_bets(bets, filename):
             writer.writerow(bet)
 
 def print_usage():
-    print(f"\nUsage:\n\npython3 betsync/export_bets.py [user_id (default: ncolosso)] [filename (default: bets.csv)]\n")
+    print(f"\nUsage:\n\npython3 betsync/export_bets.py [user_id (default: ncolosso)]\n")
 
 
 if __name__ == "__main__":
@@ -72,10 +79,7 @@ if __name__ == "__main__":
     if (len(sys.argv) > 1):
         internal_id = sys.argv[1]
 
-    output_filename = "bets.csv"
-    if (len(sys.argv) > 2):
-        output_filename = sys.argv[2]
-    output_filename = "exported_bets/" + output_filename
+    output_filename = OUTPUT_FOLDER + "/" + BET_HISTORY_FILE_PREFIX + "_" + internal_id + ".csv"
 
     betslips = get_betslips(internal_id)
     processed_bets = process_betslips(betslips)
