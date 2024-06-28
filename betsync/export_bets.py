@@ -44,7 +44,6 @@ def process_betslips(betslips):
         }
         if processed_bet.get("betSlipType") == "single":
             bet = betslip.get("bets")[0]
-            print(bet)
             event = bet.get("event")
             processed_bet["selection"] = bet.get("bookDescription")
             processed_bet["betType"] = bet.get("type")
@@ -53,6 +52,8 @@ def process_betslips(betslips):
             processed_bet["selection"] = "parlay"
             processed_bet["betType"] = "parlay"
             processed_bet["sport"] = "parlay"
+        if processed_bet.get("betType") is None:
+            processed_bet["betType"] = "*"
         processed_bets.append(processed_bet)
     return processed_bets
 
