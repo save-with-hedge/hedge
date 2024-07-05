@@ -42,7 +42,7 @@ def process_betslips(betslips):
             "betSlipType": betslip.get("type"),
             "betType": "",
             "odds": betslip.get("oddsAmerican"),
-            "stake": betslip.get("atRisk"),
+            "wager": betslip.get("atRisk"),
             "result": betslip.get("outcome"),
             "return": betslip.get("netProfit"),
         }
@@ -65,7 +65,7 @@ def process_betslips(betslips):
 
 def export_bets(bets, filename):
     # Write bets to csv
-    fieldnames = ["time", "result", "return", "sport", "betSlipType", "betType", "odds", "selection", "stake"]
+    fieldnames = ["time", "result", "return", "sport", "betSlipType", "betType", "odds", "selection", "wager"]
     write_csv(filename, bets, fieldnames)
 
 

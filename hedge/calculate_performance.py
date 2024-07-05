@@ -34,7 +34,6 @@ def calculate_performance(internal_id):
     print(json.dumps(bet_performance_dict, indent=2))
 
 
-
 def update_metrics(bet_metrics, bet):
     result = bet.get("result").lower()
     net_return = float(bet.get("return")) / 100
