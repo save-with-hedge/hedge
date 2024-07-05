@@ -11,14 +11,17 @@ import sys
 from dotenv import load_dotenv
 
 from betsync_client import BetSyncClient
-from constants import INTERNAL_ID_NICO, OUTPUT_FOLDER, BET_HISTORY_FILE_PREFIX
+from utils.constants import INTERNAL_ID_NICO, BET_HISTORY_FILE_PREFIX
+from utils.csv_utils import write_csv
+from utils.path_anchor import OUTPUT_FOLDER
 
 load_dotenv()
 
-def get_betslips(internal_id):
 
+def get_betslips(internal_id):
     # Create BetSync client
-    betsync_client = BetSyncClient(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
+    betsync_client = BetSyncClient(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"),
+                                   os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
 
     # Get bettorAccount id
     bettor_accounts = betsync_client.get_bettor_accounts()
@@ -27,6 +30,7 @@ def get_betslips(internal_id):
     # Pull betslips
     betslips = betsync_client.get_betslips_by_bettor_account(bettor_account_id)
     return betslips
+
 
 def process_betslips(betslips):
     processed_bets = []
@@ -44,10 +48,11 @@ def process_betslips(betslips):
         }
         if processed_bet.get("betSlipType") == "single":
             bet = betslip.get("bets")[0]
-            event = bet.get("event")
             processed_bet["selection"] = bet.get("bookDescription")
             processed_bet["betType"] = bet.get("type")
-            processed_bet["sport"] = event.get("sport")
+            event = bet.get("event")
+            if event:
+                processed_bet["sport"] = event.get("sport")
         elif processed_bet.get("betSlipType") == "parlay":
             processed_bet["selection"] = "parlay"
             processed_bet["betType"] = "parlay"
@@ -57,21 +62,19 @@ def process_betslips(betslips):
         processed_bets.append(processed_bet)
     return processed_bets
 
+
 def export_bets(bets, filename):
     # Write bets to csv
-    fieldnames = ["time", "selection", "sport", "betSlipType", "betType", "odds", "stake", "result", "return"]
-    with open(filename, "w", newline="") as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
-        for bet in bets:
-            writer.writerow(bet)
+    fieldnames = ["time", "result", "return", "sport", "betSlipType", "betType", "odds", "selection", "stake"]
+    write_csv(filename, bets, fieldnames)
+
 
 def print_usage():
     print(f"\nUsage:\n\npython3 betsync/export_bets.py [user_id (default: ncolosso)]\n")
 
 
 if __name__ == "__main__":
-    
+
     if (len(sys.argv) > 1 and sys.argv[1].lower() == "help"):
         print_usage()
         exit()

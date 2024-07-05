@@ -89,8 +89,14 @@ class BetSyncClient:
             return
         return json.loads(response.text)
 
-    def get_betslips_by_bettor_account(self, bettor_account_id):
+    def get_betslips_by_bettor_account(self, bettor_account_id, start_date=None, end_date=None):
         url = self.base_url + "/bettorAccounts/" + bettor_account_id + "/betSlips"
+        if start_date:
+            url += f"?timePlacedStart={start_date}"
+        if end_date and start_date:
+            url += f"&timePlacedEnd={end_date}"
+        elif end_date and start_date is None:
+            url += f"?timePlacedEnd={end_date}"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:

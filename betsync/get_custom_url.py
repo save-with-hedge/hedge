@@ -9,9 +9,10 @@ import sys
 from dotenv import load_dotenv
 
 from betsync_client import BetSyncClient
-from constants import INTERNAL_ID_NICO
+from utils.constants import INTERNAL_ID_NICO
 
 load_dotenv()
+
 
 def get_custom_ur(book_region_id, internal_id):
 
@@ -25,6 +26,7 @@ def get_custom_ur(book_region_id, internal_id):
     # Create url
     custom_url = f"https://ui.sharpsports.io/link/{cid}/region/{book_region_id}/login"
     return custom_url
+
 
 def print_usage():
     print(f"\nUsage:\n\npython3 betsync/get_custom_url.py [user_id (default: ncolosso)] [sportsbook: fanduel/draftkings/underdog (default:fanduel)]\n")

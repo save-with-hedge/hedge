@@ -13,7 +13,10 @@ import csv
 import json
 import sys
 
-from constants import INTERNAL_ID_NICO, OUTPUT_FOLDER, BET_HISTORY_FILE_PREFIX, PERFORMANCE_FILE_PREFIX
+from utils.constants import INTERNAL_ID_NICO, BET_HISTORY_FILE_PREFIX, PERFORMANCE_FILE_PREFIX
+from utils.csv_utils import read_csv
+from utils.path_anchor import OUTPUT_FOLDER
+
 
 def calculate_performance(internal_id):
     # TODO filter by time window
@@ -30,15 +33,7 @@ def calculate_performance(internal_id):
         update_metrics(bet_performance_dict[key], bet)
     print(json.dumps(bet_performance_dict, indent=2))
 
-    # Output metrics
 
-def read_csv(filepath):
-    rows = []
-    with open(filepath, "r") as csvfile:
-        reader = csv.DictReader(csvfile)
-        for row in reader:
-            rows.append(row)
-    return rows
 
 def update_metrics(bet_metrics, bet):
     result = bet.get("result").lower()
@@ -51,9 +46,11 @@ def update_metrics(bet_metrics, bet):
         bet_metrics["push_count"] += 1
     bet_metrics["net_return"] += net_return
 
+
 def export_metrics():
     # Write metrics to csv
     print("")
+
 
 def print_usage():
     print(f"\nUsage:\n\npython3 betsync/calculate_performance.py [user_id (default: ncolosso)]\n")
@@ -70,5 +67,5 @@ if __name__ == "__main__":
         internal_id = sys.argv[1]
 
     output_filename = OUTPUT_FOLDER + "/" + PERFORMANCE_FILE_PREFIX + "_" + internal_id + ".csv"
-    
+
     calculate_performance(internal_id)
