@@ -13,6 +13,7 @@ def read_csv(filepath):
 def write_csv(filepath, rows, fieldnames):
     with open(filepath, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        writer.writeheader()
+        if fieldnames:
+            writer.writeheader()
         for row in rows:
             writer.writerow(row)

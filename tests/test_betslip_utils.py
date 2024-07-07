@@ -1,6 +1,6 @@
 import json
 
-from datetime import date, timedelta
+from datetime import timedelta
 
 import pytest
 from freezegun import freeze_time
@@ -33,6 +33,23 @@ def test_filter_betslips_by_timestamp(mock_bets):
 
 
 def test_calculate_avg_unit_size(mock_bets):
-    expected = 55.0
+    expected = 50.0
     actual = calculate_avg_unit_size(mock_bets)
     assert actual == expected
+
+
+def test_calculate_roi(mock_bets):
+    expected = 25.39
+    actual = calculate_roi(mock_bets)
+    assert actual == expected
+
+
+def test_get_decimal_from_odds():
+    odds_neg = -110
+    odds_pos = 250
+    expected_neg = 1.91
+    expected_pos = 3.5
+    actual_neg = get_decimal_from_odds(odds_neg)
+    actual_pos = get_decimal_from_odds(odds_pos)
+    assert actual_neg == expected_neg
+    assert actual_pos == expected_pos

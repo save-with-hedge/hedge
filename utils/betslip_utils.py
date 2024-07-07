@@ -28,14 +28,13 @@ def group_betslips_by_bet_type(betslips):
     """
     Return a dictionary where each key is a betType and each value is the list of betSlips for that betType
     """
-    pass
-
-
-def group_betslips_by_betslip_type(betslips):
-    """
-    Return a dictionary where each key is a betSlipType and each value is the list of betSlips for that betSlipType
-    """
-    pass
+    grouped_betslips = {}
+    for betslip in betslips:
+        bet_type = betslip.get("betType")
+        if bet_type not in grouped_betslips:
+            grouped_betslips[bet_type] = []
+        grouped_betslips[bet_type].append(betslip)
+    return grouped_betslips
 
 
 def calculate_avg_unit_size(betslips):
@@ -54,12 +53,13 @@ def calculate_roi(betslips):
     for betslip in betslips:
         wager_sum += float(betslip.get("wager"))
         net_return += float(betslip.get("return"))
-    return wager_sum / net_return
+    return round((100 * net_return / wager_sum), 2)
 
 
 def get_decimal_from_odds(odds):
+    decimal = 0.0
     if odds > 0:
-        return float(1 + (odds / 100))
+        decimal = float(1 + (odds / 100))
     elif odds < 0:
-        return float(1 + (100 / abs(odds)))
-    return 0.0
+        decimal = float(1 + (100 / abs(odds)))
+    return round(decimal, 2)
