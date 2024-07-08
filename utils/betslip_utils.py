@@ -5,7 +5,7 @@ from utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_
 
 def get_past_date_formatted(delta):
     """
-    Get formatted datetime string with timedelta applied
+    :param delta: timedelta
     """
     past_date = datetime.today() - delta
     return past_date.strftime(SHARP_API_REQUEST_DATE_FORMAT)
@@ -13,7 +13,9 @@ def get_past_date_formatted(delta):
 
 def filter_betslips_by_timestamp(betslips, delta):
     """
-    Note: this algo is not optimized for performance, but should be fine for the time being
+    This algo is not optimized for performance, but should be fine for the time being
+    :param betslips: dictionary of betslips
+    :param delta: timedelta
     """
     start_date = datetime.today() - delta
     filtered_betslips = []
@@ -27,6 +29,7 @@ def filter_betslips_by_timestamp(betslips, delta):
 def group_betslips_by_bet_type(betslips):
     """
     Return a dictionary where each key is a betType and each value is the list of betSlips for that betType
+    :param betslips: dictionary of betslips
     """
     grouped_betslips = {}
     for betslip in betslips:
@@ -38,15 +41,19 @@ def group_betslips_by_bet_type(betslips):
 
 
 def calculate_avg_unit_size(betslips):
+    """
+    :param betslips: dictionary of betslips
+    """
     wager_sum = 0
     for betslip in betslips:
         wager_sum += float(betslip.get("wager"))
-    return wager_sum / len(betslips)
+    return round(wager_sum / len(betslips), 2)
 
 
 def calculate_roi(betslips):
     """
     ROI = net return as a % of total wager
+    :param betslips: dictionary of betslips
     """
     wager_sum = 0
     net_return = 0

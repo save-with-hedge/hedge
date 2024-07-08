@@ -10,7 +10,7 @@ def read_csv(filepath):
     return rows
 
 
-def write_csv(filepath, rows, fieldnames):
+def write_csv(filepath, rows, fieldnames=None):
     with open(filepath, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if fieldnames:
