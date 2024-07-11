@@ -6,7 +6,7 @@ import os
 import sys
 from dotenv import load_dotenv
 
-from betsync_client import BetSyncClient
+from betsync_service import BetSyncClient
 from utils.constants import INTERNAL_ID_NICO
 
 load_dotenv()
@@ -14,7 +14,7 @@ load_dotenv()
 
 def get_custom_ur(book_region_id, internal_id):
 
-    # Create betsync client
+    # Create service client
     betsync_client = BetSyncClient(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
     betsync_client.create_extension_auth_token()
 

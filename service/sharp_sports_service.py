@@ -2,7 +2,7 @@ import json
 import requests
 
 
-class BetSyncClient:
+class SharpSportsService:
 
     def __init__(self, internal_id, public_api_key, private_api_key):
         self.internal_id = internal_id

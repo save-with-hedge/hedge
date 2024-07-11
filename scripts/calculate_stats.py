@@ -35,14 +35,21 @@ def calculate_stats(user_id, timedelta=None):
             "roi": calculate_roi(bets_grouped.get(bet_type)),
         }
 
+    # Append unit size to bets list
+    for bet in bets:
+        bet_type = bet.get("betType")
+        bet["avgUnit"] = stats.get(bet_type).get("avgUnit")
+        bet["roi"] = stats.get(bet_type).get("roi")
+
     # Write to json and csv
     stats_json = STATS_FOLDER + "/" + user_id + ".json"
     write_json(stats_json, stats)
     print(f"Wrote stats to {stats_json}")
 
-    # stats_csv = STATS_FOLDER + "/" + user_id + ".csv"
-    # write_csv(stats_csv, stats, list(stats.keys()))
-    # print(f"Wrote stats to {stats_csv}")
+    csv_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".csv"
+    fieldnames = list(bets[0].keys())
+    write_csv(csv_filepath, bets, fieldnames)
+    print(f"Wrote betslips t0 {csv_filepath}")
 
 
 def print_usage():

@@ -6,11 +6,11 @@ import os
 import sys
 from dotenv import load_dotenv
 
-from betsync_client import BetSyncClient
+from betsync_service import BetSyncClient
 from utils.constants import INTERNAL_ID_NICO
 from utils.csv_utils import write_csv
 from utils.json_utils import write_json, read_json
-from utils.path_anchor import OUTPUT_FOLDER, BETSLIPS_RAW_FOLDER, BETSLIPS_FORMATTED_FOLDER
+from utils.path_anchor import BETSLIPS_RAW_FOLDER, BETSLIPS_FORMATTED_FOLDER
 
 load_dotenv()
 
@@ -72,10 +72,6 @@ def format_bets(raw_betslips):
     json_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
     write_json(json_filepath, formatted_bets)
     print(f"Wrote {len(formatted_bets)} rows to file {json_filepath}")
-
-    csv_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".csv"
-    fieldnames = list(formatted_bets[0].keys())
-    write_csv(csv_filepath, formatted_bets, fieldnames)
 
     return formatted_bets
 
