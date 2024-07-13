@@ -12,11 +12,16 @@ from utils.json_utils import read_json, write_json
 from utils.path_anchor import BETSLIPS_FORMATTED_FOLDER, STATS_FOLDER
 
 
-def calculate_stats(internal_id, timedelta=None):
+def calculate_stats(internal_id, fetch, timedelta=None):
     """
     For the given user and timedelta, calculate average unit size and ROI by bet type and write the results to
     json and csv
     """
+    # Refresh bettor
+    if fetch:
+        raw_betslips = fetch_betslips(internal_id)
+        formatted_bets = format_bets(raw_betslips, internal_id)
+
     # Get bets for user_id
     bets_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
     bets = read_json(bets_filepath)
@@ -30,11 +35,17 @@ def calculate_stats(internal_id, timedelta=None):
 
     # Calculate stats
     stats = {}
+    stats_list = []
     for bet_type in bets_grouped:
         stats[bet_type] = {
             "avgUnit": calculate_avg_unit_size(bets_grouped.get(bet_type)),
             "roi": calculate_roi(bets_grouped.get(bet_type)),
         }
+        stats_list.append({
+            "betType": bet_type,
+            "avgUnit": stats.get(bet_type).get("avgUnit"),
+            "roi": stats.get(bet_type).get("roi")
+        })
 
     # Append unit size to bets list
     for bet in bets:
@@ -42,15 +53,22 @@ def calculate_stats(internal_id, timedelta=None):
         bet["avgUnit"] = stats.get(bet_type).get("avgUnit")
         bet["roi"] = stats.get(bet_type).get("roi")
 
-    # Write to json and csv
+    # Write stats to json and csv
     stats_json = STATS_FOLDER + "/" + internal_id + ".json"
-    write_json(stats_json, stats)
+    write_json(stats_json, stats_list)
     print(f"Wrote stats to {stats_json}")
 
+    stats_csv = STATS_FOLDER + "/" + internal_id + ".csv"
+    write_csv(stats_csv, stats_list, list(stats_list[0].keys()))
+    print(f"Wrote stats to {stats_csv}")
+
+    # Write betslips to csv
     csv_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".csv"
     fieldnames = list(bets[0].keys())
     write_csv(csv_filepath, bets, fieldnames)
     print(f"Wrote betslips to {csv_filepath}")
+
+    return stats_list
 
 
 def print_usage():
@@ -67,8 +85,8 @@ if __name__ == "__main__":
     if (len(sys.argv) > 1):
         internal_id = sys.argv[1]
 
+    fetch = False
     if (len(sys.argv) > 2) and sys.argv[2] == "fetch":
-        raw_betslips = fetch_betslips(internal_id)
-        formatted_bets = format_bets(raw_betslips, internal_id)
+        fetch = True
 
-    calculate_stats(internal_id)
+    calculate_stats(internal_id, fetch)
