@@ -12,7 +12,7 @@ from utils.constants import INTERNAL_ID_NICO
 load_dotenv()
 
 
-def get_custom_ur(book_region_id, internal_id):
+def get_custom_url(internal_id, book_region_id=None):
 
     # Create service client
     sharp_sports_service = SharpSportsService(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
@@ -22,7 +22,9 @@ def get_custom_ur(book_region_id, internal_id):
     cid = sharp_sports_service.create_context()
 
     # Create url
-    custom_url = f"https://ui.sharpsports.io/link/{cid}/region/{book_region_id}/login"
+    custom_url = f"https://ui.sharpsports.io/link/{cid}"
+    if book_region_id:
+        custom_url += f"/region/{book_region_id}/login"
     return custom_url
 
 
@@ -53,5 +55,5 @@ if __name__ == "__main__":
             book = "Underdog"
             book_region_id = os.getenv("UNDERDOG_NY_ID")
 
-    url = get_custom_ur(book_region_id, internal_id)
+    url = get_custom_url(internal_id, book_region_id=book_region_id)
     print(f"\nCustom url for {internal_id}, {book}: {url}")

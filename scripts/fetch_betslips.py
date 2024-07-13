@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 from service.sharp_sports_service import SharpSportsService
 from utils.constants import INTERNAL_ID_NICO
-from utils.json_utils import write_json, read_json
+from utils.json_utils import write_json
 from utils.path_anchor import BETSLIPS_RAW_FOLDER, BETSLIPS_FORMATTED_FOLDER
 
 load_dotenv()
