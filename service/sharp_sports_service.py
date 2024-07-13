@@ -89,8 +89,16 @@ class SharpSportsService:
             return
         return json.loads(response.text)
 
-    def get_betslips_by_bettor_account(self, bettor_account_id, status="completed", start_date=None, end_date=None):
-        url = self.base_url + "/bettorAccounts/" + bettor_account_id + "/betSlips"
+    def refresh_bettor(self):
+        url = self.base_url + "/bettors/" + self.internal_id + "/refresh"
+        headers = self.get_headers(self.public_api_key)
+        response = requests.post(url, headers=headers)
+        if response.status_code != 200 and response.status_code != 201:
+            print(f"{response.status_code} - {response.text}")
+            return
+
+    def get_betslips_by_bettor(self, status="completed", start_date=None, end_date=None):
+        url = self.base_url + "/bettors/" + self.internal_id + "/betSlips"
         url += f"?status={status}"
         if start_date:
             url += f"&timePlacedStart={start_date}"

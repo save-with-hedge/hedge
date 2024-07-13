@@ -6,9 +6,8 @@ import os
 import sys
 from dotenv import load_dotenv
 
-from betsync_service import BetSyncClient
+from service.sharp_sports_service import SharpSportsService
 from utils.constants import INTERNAL_ID_NICO
-from utils.csv_utils import write_csv
 from utils.json_utils import write_json, read_json
 from utils.path_anchor import BETSLIPS_RAW_FOLDER, BETSLIPS_FORMATTED_FOLDER
 
@@ -20,15 +19,14 @@ def fetch_betslips(internal_id):
     Fetch betslips from Sharp Sports and write raw betslips to json.
     """
     # Create BetSync client
-    betsync_client = BetSyncClient(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"),
-                                   os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
+    betsync_client = SharpSportsService(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"),
+                                        os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
 
-    # Get bettorAccount id
-    bettor_accounts = betsync_client.get_bettor_accounts()
-    bettor_account_id = bettor_accounts[0].get("id")
+    # Refresh bettor accounts
+    betsync_client.refresh_bettor()
 
     # Pull betslips and write to file
-    betslips = betsync_client.get_betslips_by_bettor_account(bettor_account_id)
+    betslips = betsync_client.get_betslips_by_bettor()
     filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
     write_json(filepath, betslips)
     print(f"Wrote {len(betslips)} rows to file {filepath}")
@@ -36,38 +34,41 @@ def fetch_betslips(internal_id):
     return betslips
 
 
-def format_bets(raw_betslips):
+def format_bets(raw_betslips, internal_id):
     """
     Format the raw betslips from Sharp Sports and write to json.
     """
     formatted_bets = []
     for betslip in raw_betslips:
-        bet = {
+        formatted_bet = {
+            "book": betslip.get("book").get("name"),
             "time": betslip.get("timePlaced"),
             "selection": "",
             "sport": "",
-            "betSlipType": betslip.get("type"),
             "betType": "",
+            "propDetails": "",
             "odds": betslip.get("oddsAmerican"),
             "wager": float(betslip.get("atRisk")) / 100,
             "result": betslip.get("outcome"),
             "return": float(betslip.get("netProfit")) / 100,
         }
-        if bet.get("betSlipType") == "single":
-            bet_raw = betslip.get("bets")[0]
-            bet["selection"] = bet_raw.get("bookDescription")
-            if bet_raw.get("type") == "straight" and bet_raw.get("proposition"):
-                bet["betType"] = bet_raw.get("proposition")
-            else:
-                bet["betType"] = bet_raw.get("type")
-            event = bet_raw.get("event")
-            if event:
-                bet["sport"] = event.get("sport")
-        elif bet.get("betSlipType") == "parlay":
-            bet["selection"] = "parlay"
-            bet["betType"] = "parlay"
-            bet["sport"] = "parlay"
-        formatted_bets.append(bet)
+        if betslip.get("type") == "single":
+            bet = betslip.get("bets")[0]
+            formatted_bet["selection"] = bet.get("bookDescription")
+            if bet.get("event"):
+                formatted_bet["sport"] = bet.get("event").get("sport")
+            if not bet.get("type"):
+                formatted_bet["betType"] = "other"
+            if bet.get("type") == "straight":
+                formatted_bet["betType"] = bet.get("proposition")
+            elif bet.get("type") == "prop":
+                formatted_bet["betType"] = "other"
+                formatted_bet["propDetails"] = bet.get("propDetails")
+        elif betslip.get("type") == "parlay":
+            formatted_bet["selection"] = "parlay"
+            formatted_bet["sport"] = "parlay"
+            formatted_bet["betType"] = "parlay"
+        formatted_bets.append(formatted_bet)
 
     json_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
     write_json(json_filepath, formatted_bets)
@@ -90,6 +91,6 @@ if __name__ == "__main__":
     if (len(sys.argv) > 1):
         internal_id = sys.argv[1]
 
-    # raw_betslips = fetch_betslips(internal_id)
-    raw_betslips = read_json(BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json")
-    formatted_bets = format_bets(raw_betslips)
+    raw_betslips = fetch_betslips(internal_id)
+    # raw_betslips = read_json(BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json")
+    formatted_bets = format_bets(raw_betslips, internal_id)

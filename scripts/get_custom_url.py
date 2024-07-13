@@ -6,7 +6,7 @@ import os
 import sys
 from dotenv import load_dotenv
 
-from betsync_service import BetSyncClient
+from service.sharp_sports_service import SharpSportsService
 from utils.constants import INTERNAL_ID_NICO
 
 load_dotenv()
@@ -15,11 +15,11 @@ load_dotenv()
 def get_custom_ur(book_region_id, internal_id):
 
     # Create service client
-    betsync_client = BetSyncClient(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
-    betsync_client.create_extension_auth_token()
+    sharp_sports_service = SharpSportsService(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
+    sharp_sports_service.create_extension_auth_token()
 
     # Create context
-    cid = betsync_client.create_context()
+    cid = sharp_sports_service.create_context()
 
     # Create url
     custom_url = f"https://ui.sharpsports.io/link/{cid}/region/{book_region_id}/login"
