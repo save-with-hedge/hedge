@@ -16,11 +16,14 @@ def filter_betslips_by_timestamp(betslips, delta):
     This algo is not optimized for performance, but should be fine for the time being
     :param betslips: dictionary of betslips
     :param delta: timedelta
+    :return: list of betslips
     """
     start_date = datetime.today() - delta
     filtered_betslips = []
     for betslip in betslips:
-        date = datetime.strptime(betslip.get("time"), BETSLIP_RESULTS_DATE_FORMAT)
+        if not betslip.get("timeClosed"):   # TODO clean this up
+            continue
+        date = datetime.strptime(betslip.get("timeClosed"), BETSLIP_RESULTS_DATE_FORMAT)
         if date >= start_date:
             filtered_betslips.append(betslip)
     return filtered_betslips

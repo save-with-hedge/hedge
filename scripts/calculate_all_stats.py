@@ -15,6 +15,8 @@ def calculate_all_stats(delta=None):
     all_stats = []
     for internal_id in internal_ids:
         user_stats = calculate_stats(internal_id, True, delta)
+        if len(user_stats) == 0:
+            continue
         for bet_type_stats in user_stats:
             all_stats_row = {
                 "internalId": internal_id,

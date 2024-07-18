@@ -20,13 +20,13 @@ def fetch_betslips(internal_id):
     Fetch betslips from Sharp Sports and write raw betslips to json.
     """
     # Create BetSync client
-    betsync_client = SharpSportsService(internal_id)
+    betsync_client = SharpSportsService()
 
     # Refresh bettor accounts
-    betsync_client.refresh_bettor()
+    betsync_client.refresh_bettor(internal_id)
 
     # Pull betslips and write to file
-    betslips = betsync_client.get_betslips_by_bettor()
+    betslips = betsync_client.get_betslips_by_bettor(internal_id)
     filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
     write_json(filepath, betslips)
     print(f"Wrote {len(betslips)} rows to file {filepath}")

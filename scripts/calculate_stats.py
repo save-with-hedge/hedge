@@ -27,6 +27,9 @@ def calculate_stats(internal_id, fetch, timedelta=None):
     bets_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
     bets = read_json(bets_filepath)
 
+    if len(bets) == 0:   # TODO clean this up
+        return []
+
     # Filter by timedelta
     if timedelta:
         bets = filter_betslips_by_timestamp(bets, timedelta)
@@ -49,6 +52,9 @@ def calculate_stats(internal_id, fetch, timedelta=None):
                 "roi": stats.get(bet_type).get("roi"),
             }
         )
+
+    if len(stats_list) == 0:  # TODO clean this up
+        return []
 
     # Append unit size to bets list
     for bet in bets:

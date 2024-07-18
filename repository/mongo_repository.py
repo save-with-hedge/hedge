@@ -43,17 +43,14 @@ class MongoRepository:
         """
         :return: A dictionary of user info, or None if the user does not exist
         """
-        key = {"users": internal_id}
-        return self.users_collection.find_one(key)
+        return self.users_collection.find_one({internal_id: {"$exists": True}})
 
     def create_user(self, internal_id, first, last, phone):
         document = {
-            "user": {
-                internal_id: {
-                    "first": first,
-                    "last": last,
-                    "phone": phone,
-                }
+            internal_id: {
+                "first": first,
+                "last": last,
+                "phone": phone,
             }
         }
         self.users_collection.insert_one(document)
@@ -61,4 +58,6 @@ class MongoRepository:
 
 if __name__ == "__main__":
     repository = MongoRepository()
-    repository.ping()
+    user = repository.get_user("nico_colosso")
+    if user is None:
+        repository.create_user("nico_colosso", "nico", "colosso", "650-996-3840")

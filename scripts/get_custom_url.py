@@ -20,7 +20,7 @@ BETMGM_ID = os.getenv("BETMGM_NY_ID")
 def get_custom_url(internal_id):
 
     # Create service client
-    sharp_sports_service = SharpSportsService(internal_id)
+    sharp_sports_service = SharpSportsService()
     sharp_sports_service.create_extension_auth_token()
 
     # Create context
