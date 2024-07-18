@@ -2,6 +2,7 @@
 Usage:
     python3 calculate_stats.py [user_id (default: ncolosso)]
 """
+
 import sys
 
 from scripts.fetch_betslips import fetch_betslips, format_bets
@@ -20,7 +21,7 @@ def calculate_stats(internal_id, fetch, timedelta=None):
     # Refresh bettor
     if fetch:
         raw_betslips = fetch_betslips(internal_id)
-        formatted_bets = format_bets(raw_betslips, internal_id)
+        format_bets(raw_betslips, internal_id)
 
     # Get bets for user_id
     bets_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
@@ -41,11 +42,13 @@ def calculate_stats(internal_id, fetch, timedelta=None):
             "avgUnit": calculate_avg_unit_size(bets_grouped.get(bet_type)),
             "roi": calculate_roi(bets_grouped.get(bet_type)),
         }
-        stats_list.append({
-            "betType": bet_type,
-            "avgUnit": stats.get(bet_type).get("avgUnit"),
-            "roi": stats.get(bet_type).get("roi")
-        })
+        stats_list.append(
+            {
+                "betType": bet_type,
+                "avgUnit": stats.get(bet_type).get("avgUnit"),
+                "roi": stats.get(bet_type).get("roi"),
+            }
+        )
 
     # Append unit size to bets list
     for bet in bets:
@@ -72,17 +75,19 @@ def calculate_stats(internal_id, fetch, timedelta=None):
 
 
 def print_usage():
-    print(f"\nUsage:\n\npython3 betsync/calculate_stats.py [user_id (default: ncolosso)] [fetch]\n")
+    print(
+        f"\nUsage:\n\npython3 betsync/calculate_stats.py [user_id (default: ncolosso)] [fetch]\n"
+    )
 
 
 if __name__ == "__main__":
 
-    if (len(sys.argv) > 1 and sys.argv[1].lower() == "help"):
+    if len(sys.argv) > 1 and sys.argv[1].lower() == "help":
         print_usage()
         exit()
 
     internal_id = INTERNAL_ID_NICO
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         internal_id = sys.argv[1]
 
     fetch = False

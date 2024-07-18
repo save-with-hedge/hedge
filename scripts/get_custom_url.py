@@ -2,6 +2,7 @@
 Usage: 
     python3 get_custom_url.py [user_id (default: ncolosso)]
 """
+
 import os
 import sys
 from dotenv import load_dotenv
@@ -19,7 +20,7 @@ BETMGM_ID = os.getenv("BETMGM_NY_ID")
 def get_custom_url(internal_id):
 
     # Create service client
-    sharp_sports_service = SharpSportsService(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"), os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
+    sharp_sports_service = SharpSportsService(internal_id)
     sharp_sports_service.create_extension_auth_token()
 
     # Create context
@@ -36,17 +37,19 @@ def get_custom_url(internal_id):
 
 
 def print_usage():
-    print(f"\nUsage:\n\npython3 betsync/get_custom_url.py [user_id (default: ncolosso)]\n")
+    print(
+        f"\nUsage:\n\npython3 betsync/get_custom_url.py [user_id (default: ncolosso)]\n"
+    )
 
 
 if __name__ == "__main__":
 
-    if (len(sys.argv) > 1 and sys.argv[1].lower() == "help"):
+    if len(sys.argv) > 1 and sys.argv[1].lower() == "help":
         print_usage()
         exit()
 
     internal_id = INTERNAL_ID_NICO
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         internal_id = sys.argv[1]
 
     cid, urls = get_custom_url(internal_id)

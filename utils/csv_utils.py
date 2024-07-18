@@ -2,6 +2,9 @@ import csv
 
 
 def read_csv(filepath):
+    """
+    :return: a Python list of the csv rows
+    """
     rows = []
     with open(filepath, "r") as csvfile:
         reader = csv.DictReader(csvfile)

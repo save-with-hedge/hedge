@@ -2,6 +2,7 @@
 Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
+
 import os
 import sys
 from dotenv import load_dotenv
@@ -19,8 +20,7 @@ def fetch_betslips(internal_id):
     Fetch betslips from Sharp Sports and write raw betslips to json.
     """
     # Create BetSync client
-    betsync_client = SharpSportsService(internal_id, os.getenv("SHARPSPORTS_PUBLIC_API_KEY"),
-                                        os.getenv("SHARPSPORTS_PRIVATE_API_KEY"))
+    betsync_client = SharpSportsService(internal_id)
 
     # Refresh bettor accounts
     betsync_client.refresh_bettor()
@@ -42,7 +42,8 @@ def format_bets(raw_betslips, internal_id):
     for betslip in raw_betslips:
         formatted_bet = {
             "book": betslip.get("book").get("name"),
-            "time": betslip.get("timePlaced"),
+            "timePlaced": betslip.get("timePlaced"),
+            "timeClosed": betslip.get("timeClosed"),
             "selection": "",
             "sport": "",
             "betType": "",
@@ -78,17 +79,19 @@ def format_bets(raw_betslips, internal_id):
 
 
 def print_usage():
-    print(f"\nUsage:\n\npython3 betsync/fetch_betslips.py [user_id (default: ncolosso)]\n")
+    print(
+        f"\nUsage:\n\npython3 betsync/fetch_betslips.py [user_id (default: ncolosso)]\n"
+    )
 
 
 if __name__ == "__main__":
 
-    if (len(sys.argv) > 1 and sys.argv[1].lower() == "help"):
+    if len(sys.argv) > 1 and sys.argv[1].lower() == "help":
         print_usage()
         exit()
 
     internal_id = INTERNAL_ID_NICO
-    if (len(sys.argv) > 1):
+    if len(sys.argv) > 1:
         internal_id = sys.argv[1]
 
     raw_betslips = fetch_betslips(internal_id)

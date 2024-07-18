@@ -70,3 +70,10 @@ def get_decimal_from_odds(odds):
     elif odds < 0:
         decimal = float(1 + (100 / abs(odds)))
     return round(decimal, 2)
+
+
+def get_ytd_timedelta():
+    current_date = datetime.now()
+    jan_1 = datetime(current_date.year, 1, 1)
+    delta = current_date - jan_1
+    return delta

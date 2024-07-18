@@ -1,6 +1,6 @@
 {
   "Caesars": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "New Jersey": "BSTA_IrIeP4vRNyPr1AdZvy9ZA",
       "Indiana": "BSTA_c2SOqYORX6JvPD8FXuEvQ",
       "Ohio": "BRGN_634583d4bb3545b59967b92150dd032f",
@@ -24,16 +24,47 @@
       "Kansas": "BRGN_c9b798e793e843a194b2c8f1967a228e",
       "Maine": "BRGN_4ffdf7e249d44c509c5613ef017e144b",
       "North Carolina": "BRGN_aeee3028d091458591489d8b78bd210f"
-    }
+    },
+    "bookRegionAbbrId": {
+      "NJ": "BSTA_IrIeP4vRNyPr1AdZvy9ZA",
+      "IN": "BSTA_c2SOqYORX6JvPD8FXuEvQ",
+      "OH": "BRGN_634583d4bb3545b59967b92150dd032f",
+      "PA": "BRGN_55edab0b27b6464db77086726378d5e7",
+      "WV": "BSTA_iKsT2yv6QzOCONHguS8d8w",
+      "KY": "BRGN_cedb764742544ce7befbc4f64d5fd82f",
+      "MA": "BRGN_3eb5e928cbe84a1294c6fe6a7207360d",
+      "DC": "BRGN_BVPJmtXoQYq46s3Evy91w",
+      "ON": "BRGN_8ce11ec4682b4da8800c668937d31e59",
+      "WY": "BRGN_cb19581a25eb4be4819b9d54d36e0a24",
+      "MD": "BRGN_cdad1246074b44a8a4e9588017164202",
+      "CO": "BSTA_L3R7zlT7SYKXuZ3EKtibAQ",
+      "IA": "BRGN_I2bM2QsbSWufF8TdC4QvrQ",
+      "MI": "BRGN_uwbHQjCAQKiEPKeTTeCsQg",
+      "TN": "BRGN_v7JTymHoTea8VLdanVnVQ",
+      "IL": "BRGN_djeBc5EfTWt41ig6HOrtg",
+      "VA": "BRGN_NRpqfFdYTg6dhuvyQokYzw",
+      "NY": "BRGN_2993a9b573844e28a8be660016da8e7e",
+      "AZ": "BRGN_f13e0a77525549479516bce4f81e3157",
+      "LA": "BRGN_84fae99b4f234fe99a4f195545ba2963",
+      "KS": "BRGN_c9b798e793e843a194b2c8f1967a228e",
+      "ME": "BRGN_4ffdf7e249d44c509c5613ef017e144b",
+      "NC": "BRGN_aeee3028d091458591489d8b78bd210f"
+    },
+    "sdkRequired": false
   },
   "Sporttrade": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "New Jersey": "BRGN_ca77131ec07c42e294e3d832d06bb59e",
       "Colorado": "BRGN_c55d68b58a62477ca521454ca5d8771a"
-    }
+    },
+    "bookRegionAbbrId": {
+      "NJ": "BRGN_ca77131ec07c42e294e3d832d06bb59e",
+      "CO": "BRGN_c55d68b58a62477ca521454ca5d8771a"
+    },
+    "sdkRequired": true
   },
   "DraftKings": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Iowa": "BSTA_lqpNkqJjSSv5MwxCXSFbQ",
       "New Jersey": "BSTA_Yv0YVaG9Qn6o9LyqiANrAg",
       "Pennsylvania": "BSTA_Z9W4bSHtTJ2s2jzWTYihpA",
@@ -59,10 +90,38 @@
       "Virginia": "BRGN_0wL8hnhwRLCQuwSCcuueA",
       "Wyoming": "BRGN_c4e3163622244c27a63cc8a7a778584a",
       "Maine": "BRGN_757426e8305d44f7bf0a3b9385e6d0af"
-    }
+    },
+    "bookRegionAbbrId": {
+      "IA": "BSTA_lqpNkqJjSSv5MwxCXSFbQ",
+      "NJ": "BSTA_Yv0YVaG9Qn6o9LyqiANrAg",
+      "PA": "BSTA_Z9W4bSHtTJ2s2jzWTYihpA",
+      "IN": "BSTA_VyBf7eNPScmOXRrhEO7Wiw",
+      "NH": "BSTA_VaUWG8ROTomRGM9S48Fw",
+      "WV": "BSTA_Mk7lCBeiSBeS3UZy3T534w",
+      "LA": "BRGN_1c163ddd2f8c46ae98ccf113a44ddbb9",
+      "AZ": "BRGN_32a73a803feb462393fe51992a789910",
+      "KS": "BRGN_2ee12018347b45e9a8904e215a41a4d7",
+      "MD": "BRGN_0ec5fa7559c745928d5447f495b9eb7c",
+      "NY": "BRGN_b28ee954c84f4668bd4b7763beb90a97",
+      "OH": "BRGN_e90c8717db24481c8453740812ae9c01",
+      "OR": "BRGN_36705404df3140c6ad6792ea30c8a99d",
+      "IL": "BSTA_St0K5zaS9eraUC3w1Maug",
+      "CT": "BRGN_92d091310362491c9aa9970c839cf1e3",
+      "MA": "BRGN_f83b36c198b947ae98de28861b148ea1",
+      "KY": "BRGN_0871a3ff9c874c1e9fb9996cf22cb5c1",
+      "VT": "BRGN_1acf426890454bf4b93c52c11f00a2bd",
+      "NC": "BRGN_12d5e7112d5946a7babe791056851645",
+      "TN": "BSTA_5Srwa1KcRN6tQjYKK4JEA",
+      "CO": "BSTA_Okuj8vPwRPSMnYhROBE1Uw",
+      "MI": "BRGN_pyXjibWlTXScST4Z1jmlWA",
+      "VA": "BRGN_0wL8hnhwRLCQuwSCcuueA",
+      "WY": "BRGN_c4e3163622244c27a63cc8a7a778584a",
+      "ME": "BRGN_757426e8305d44f7bf0a3b9385e6d0af"
+    },
+    "sdkRequired": true
   },
   "BetMGM": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Indiana": "BSTA_7oxZ4GecSUSbTyr8YJmhQQ",
       "West Virginia": "BSTA_6LTx4bqkQjaC9OsZuOkV0Q",
       "Tennessee": "BSTA_ycl3CeFWQJ2yTDLigZtGA",
@@ -85,10 +144,35 @@
       "Maryland": "BRGN_4854e938bd8743e1af84d25d08ea93b6",
       "Massachusetts": "BRGN_7ddf32bf33f047ddb6bd5d70291348c1",
       "Puerto Rico": "BRGN_3419b87e5b93429383fa4370c78bef89"
-    }
+    },
+    "bookRegionAbbrId": {
+      "IN": "BSTA_7oxZ4GecSUSbTyr8YJmhQQ",
+      "WV": "BSTA_6LTx4bqkQjaC9OsZuOkV0Q",
+      "TN": "BSTA_ycl3CeFWQJ2yTDLigZtGA",
+      "CO": "BSTA_i0tSujGtREanbNXRyGzA",
+      "IA": "BRGN_NHwBS6n9T8KCUK7XtcQkhw",
+      "MI": "BRGN_pvLzpO5VTqLSJnfrfhz7g",
+      "AZ": "BRGN_dc8d5dfaa0854476ade23a760ed2f75f",
+      "OH": "BRGN_bb518e30893245a19653ddd69a2ed6a8",
+      "KS": "BRGN_fba6d8a6fba648768d12b5f610bdad23",
+      "DC": "BRGN_020bb3568e8045639a6732452d37fb2a",
+      "LA": "BRGN_24ddde42af1342e98ca49ddbae5dfc77",
+      "IL": "BRGN_92919ef1e83f4517aa7a7b428cfb8eab",
+      "WY": "BRGN_adec406149d144a2aed57bb8263b4795",
+      "NY": "BRGN_c352e78ffb5641a396604b93153b5933",
+      "VA": "BRGN_k6oYdqGDTmuxuwASC3C4ng",
+      "PA": "BRGN_Jg7FapWQK2ao9VZCxBA",
+      "NJ": "BSTA_fGHoZDTRSVWrkhW4ysP4A",
+      "KY": "BRGN_a5c4ee01152b45e0991928d1e103767e",
+      "NC": "BRGN_09a8639de22e490c9966d9c14146ec2e",
+      "MD": "BRGN_4854e938bd8743e1af84d25d08ea93b6",
+      "MA": "BRGN_7ddf32bf33f047ddb6bd5d70291348c1",
+      "PR": "BRGN_3419b87e5b93429383fa4370c78bef89"
+    },
+    "sdkRequired": false
   },
   "Fanduel": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "New Jersey": "BSTA_WEjLWmzfRa2pNdLoBsgVMQ",
       "Pennsylvania": "BSTA_Mko8IPpT52io9Jip924Q",
       "Indiana": "BSTA_udxXjjKQ6CvltvZmBzuTQ",
@@ -112,10 +196,36 @@
       "Ohio": "BRGN_f136f0f72bd34e57ac71e9130d89f40b",
       "Colorado": "BSTA_hi0MPzWARSSorVevVyd7DQ",
       "Vermont": "BRGN_92965a2cca044c9187518ea44e8a5752"
-    }
+    },
+    "bookRegionAbbrId": {
+      "NJ": "BSTA_WEjLWmzfRa2pNdLoBsgVMQ",
+      "PA": "BSTA_Mko8IPpT52io9Jip924Q",
+      "IN": "BSTA_udxXjjKQ6CvltvZmBzuTQ",
+      "WV": "BSTA_VN66V8asQ2LtfnGOdouHw",
+      "MD": "BRGN_8d9f8a087d064fd5ba177be8b100d80a",
+      "VA": "BRGN_TrYzDjZoSAySkZQvzHUGFg",
+      "NY": "BRGN_ab5628fa79344c39bce8fec0f17fbdcc",
+      "AZ": "BRGN_c3f1c2fab40f4213a58c10a7920c2547",
+      "WY": "BRGN_244349dc7c6c4b67a92bfd3602a18dbf",
+      "MI": "BRGN_LBVin09uTWGjwxYFKnNLQQ",
+      "IA": "BSTA_QoAMPusTO2kmv0S98c2mA",
+      "IL": "BSTA_wNbS2R0OQlPHOwSdecl5w",
+      "TN": "BSTA_iBbZ3k1QRtqxSn32UP0SxA",
+      "DC": "BRGN_fe2eb844c4654fa5a32518c5e23e082c",
+      "KS": "BRGN_2b0a892ebbd54090b7b8a91c475b3d92",
+      "MA": "BRGN_d5bab901873646f99372faaf0586c5dc",
+      "KY": "BRGN_fe511ae9835148b6ac9801ad76ed052d",
+      "NC": "BRGN_d57ff2df54b146ef9f29f859f0c404c6",
+      "CT": "BRGN_7a15553bc3a941a5b6a5d158444cb75f",
+      "LA": "BRGN_020e2bb821994da6abf9c425d1696e0e",
+      "OH": "BRGN_f136f0f72bd34e57ac71e9130d89f40b",
+      "CO": "BSTA_hi0MPzWARSSorVevVyd7DQ",
+      "VT": "BRGN_92965a2cca044c9187518ea44e8a5752"
+    },
+    "sdkRequired": true
   },
   "PrizePicks": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Alabama": "BRGN_ca96ac415541489e96a87881b3bb6ae1",
       "Alaska": "BRGN_b4fecc3493de4996ba97b737870dcdc4",
       "Arizona": "BRGN_fcedde2e45564c5484a4b73045ff5fb8",
@@ -148,10 +258,45 @@
       "Virginia": "BRGN_74e1f407acbc48eda0dbdac39948cca1",
       "Wisconsin": "BRGN_9160a9d5b3fc4e2dbe462336bc5033ae",
       "Wyoming": "BRGN_2ba3dcbd4ce74e408bca597c6ec0c258"
-    }
+    },
+    "bookRegionAbbrId": {
+      "AL": "BRGN_ca96ac415541489e96a87881b3bb6ae1",
+      "AK": "BRGN_b4fecc3493de4996ba97b737870dcdc4",
+      "AZ": "BRGN_fcedde2e45564c5484a4b73045ff5fb8",
+      "AR": "BRGN_757e4ff81df644f7899fd8ad978053a3",
+      "CA": "BRGN_9e0ce73bb39443abb24468f81416b380",
+      "CO": "BRGN_cb367a379af3439f96e2b3edecce8a84",
+      "DC": "BRGN_0f5d6edbb98540ae9bacbcab08af8357",
+      "FL": "BRGN_d7c2bb75d8a34499906b93ff9c069064",
+      "GA": "BRGN_68543ffbe867401fb263f7a256120b89",
+      "IL": "BRGN_16c00bc522554696a3558836af5ea073",
+      "KS": "BRGN_0f9a49d250f84e2cb1b10ca5d3a2456a",
+      "KY": "BRGN_52d9fd899ce94b3ba99f46d65153d6ad",
+      "IN": "BRGN_f5fbb664d46744fca1fe5de7fcac8a66",
+      "MA": "BRGN_5103cc77ccf64e58a88eb2a3ae820326",
+      "MI": "BRGN_889d53aaeb914d489c0d69e751cf9ee7",
+      "MN": "BRGN_a1bf1f05cf9d42b390c6f8cf79f17dc6",
+      "NE": "BRGN_1ea638c8c97e486db9f631605da16bb1",
+      "NM": "BRGN_b6c5de021bce40f886166bd64232cb3f",
+      "NY": "BRGN_d58c914a852342019cd698e2715d5267",
+      "NC": "BRGN_102642dbf58f4faba4b19e2c152425b0",
+      "ND": "BRGN_b734cbbee8d44eaf982838c5ab0ae20c",
+      "OK": "BRGN_6cf284d528384f529a3fe483ed1ca527",
+      "OR": "BRGN_5aab9fe4e84847f2879d340407c6f52b",
+      "RI": "BRGN_165027201df747e8aa0800a65befba06",
+      "SC": "BRGN_8e4af6b1902f452a8ce0178dfb16a82e",
+      "SD": "BRGN_10ff535b36a24b6199a0e475b5283633",
+      "TX": "BRGN_d7fdab2b718841a3bb885ee7182cb415",
+      "UT": "BRGN_ed49b154a81343278536112ca571c2ea",
+      "VT": "BRGN_1c320622377849e8ad43e3d74a64a9a2",
+      "VA": "BRGN_74e1f407acbc48eda0dbdac39948cca1",
+      "WI": "BRGN_9160a9d5b3fc4e2dbe462336bc5033ae",
+      "WY": "BRGN_2ba3dcbd4ce74e408bca597c6ec0c258"
+    },
+    "sdkRequired": true
   },
   "Fliff": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Alabama": "BRGN_75d11b671cf64a4da9a5fc8129193976",
       "Alaska": "BRGN_f7ac6e3e47384b50ba584fc221ac5937",
       "Arizona": "BRGN_0b7ea88a5d224ccfa60b16e4699fee78",
@@ -203,10 +348,64 @@
       "West Virginia": "BRGN_d46bf079db46486f8fecee8ac485f0ad",
       "Wisconsin": "BRGN_0b0c173aad754f419e7479199aff9616",
       "Wyoming": "BRGN_359a12395f77409a8fbb8d12a9fb5c0a"
-    }
+    },
+    "bookRegionAbbrId": {
+      "AL": "BRGN_75d11b671cf64a4da9a5fc8129193976",
+      "AK": "BRGN_f7ac6e3e47384b50ba584fc221ac5937",
+      "AZ": "BRGN_0b7ea88a5d224ccfa60b16e4699fee78",
+      "AR": "BRGN_bd337ff7f42f49da8488004cf98f4f5f",
+      "CA": "BRGN_7592e382b01346668af96e004efe37be",
+      "CO": "BRGN_31695b319d7d4f1c81e06d48bb07bc1f",
+      "CT": "BRGN_b43eb764174743e7b6b45ad5fb44e1e9",
+      "DE": "BRGN_69d37f075bd843438d91aa7675c2faff",
+      "DC": "BRGN_3906f2321a044d8f92382dafc3118961",
+      "FL": "BRGN_428f8be63d8c41f493231d92e9ce4a7e",
+      "GA": "BRGN_5e06025638a94801bdcf983c47b17478",
+      "HI": "BRGN_05fd018fe4d241049b49d26b9e9dc76c",
+      "ID": "BRGN_44cac4a5b495415fa743390aeffc7bf8",
+      "IL": "BRGN_d206fb6719524c738c15c4d0ed30c85b",
+      "IN": "BRGN_503470b505704d878ce62eda432b5daf",
+      "IA": "BRGN_526a2d280fe04b62917693bbdfe277a6",
+      "KS": "BRGN_169789b5263a405f80a3fe85250dfcf8",
+      "KY": "BRGN_9723b8d6f7e1452ca700295469d52be2",
+      "LA": "BRGN_17b9f474591041f99d23cae447f584b6",
+      "ME": "BRGN_d3062029e11a4f73b6312aff9d5f184b",
+      "MD": "BRGN_5035f204b75d4435879d1200d85d28f7",
+      "MA": "BRGN_6cf3a1edbf2b40f98da988a1a13f86e6",
+      "MI": "BRGN_c74e384b4012472f84db119c57aec4ac",
+      "MN": "BRGN_8851a2e3fe754061a6b3736767c68b75",
+      "MS": "BRGN_3d2f11b11614496ba1ae1fb69012c84e",
+      "MO": "BRGN_f93dfd46c4754b3aad94f022d9d7d188",
+      "MT": "BRGN_f8d61f7590d14323b314f8d15ba8bd2a",
+      "NE": "BRGN_5bfd93dde4174c1790e2588f90d16588",
+      "NV": "BRGN_fdc01bc31d77408881839d7a337e7c88",
+      "NH": "BRGN_1c79f6e28d764e8ba9c2f7e9d5a15c70",
+      "NJ": "BRGN_e46088a4b4e04a3eafc032a7439479bc",
+      "NM": "BRGN_fef0215a629a49df9c3def6af17ab035",
+      "NY": "BRGN_4de65935fdbe4192a26254002c2bb1ae",
+      "NC": "BRGN_1aa8f81ac8894870a406895903baa056",
+      "ND": "BRGN_707996c50ab440f19ba41c7fb8659d42",
+      "OH": "BRGN_5dbcb2bdb9dd40b4b0bcc1e60dfb4e10",
+      "OK": "BRGN_26276d3db3314882bb0040f800909ec8",
+      "OR": "BRGN_d83f41f90ab243b8822ca2de5b7a1274",
+      "PA": "BRGN_73f9e0889047446c852099445ad7caec",
+      "RI": "BRGN_a09ce4e416f5424b9ddfa3d26bfbf95d",
+      "SC": "BRGN_513c322536ec4c32be7faf34ccb6e63b",
+      "SD": "BRGN_6ce6a12f12b345a1b776bacc5cc988c8",
+      "TN": "BRGN_9c3d9ab4d1684f82b8fe178faa7f9632",
+      "TX": "BRGN_c7bfde6c81c6489abbc65923b3e87c19",
+      "UT": "BRGN_62901d79e7cb4c8aab909944e16d1875",
+      "VT": "BRGN_8a318423bb27402ca90100acd45b3eb4",
+      "VA": "BRGN_d4348eff1b7b4710870a41094cafa256",
+      "WA": "BRGN_ad02c52d06fb4480a6bbfba1ec4087bc",
+      "WV": "BRGN_d46bf079db46486f8fecee8ac485f0ad",
+      "WI": "BRGN_0b0c173aad754f419e7479199aff9616",
+      "WY": "BRGN_359a12395f77409a8fbb8d12a9fb5c0a"
+    },
+    "sdkRequired": false
   },
   "ESPN BET": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Maryland": "BRGN_46ec2deb4d9c46d992c1f05a70bb5248",
       "Kentucky": "BRGN_9ac41a31e8bb4abe8b37fa14ecd9f871",
       "Arizona": "BRGN_9fa6dda8216a44298f105b62bce0e4fb",
@@ -225,10 +424,31 @@
       "Kansas": "BRGN_e3016f8d463349a4af24936ead8749e8",
       "Massachusetts": "BRGN_fe52adefa8444bdeb2cc6417f21bdb14",
       "North Carolina": "BRGN_9fc0155d79d0483c8f1a4eac43c5fff9"
-    }
+    },
+    "bookRegionAbbrId": {
+      "MD": "BRGN_46ec2deb4d9c46d992c1f05a70bb5248",
+      "KY": "BRGN_9ac41a31e8bb4abe8b37fa14ecd9f871",
+      "AZ": "BRGN_9fa6dda8216a44298f105b62bce0e4fb",
+      "CO": "BRGN_a37a09f15077427e8b04efa18f934811",
+      "OH": "BRGN_26b64d2869ad41e28c628e934729fcda",
+      "LA": "BRGN_e574ac499ca147ff8752c0fe38fcf785",
+      "IL": "BRGN_8067cfd1822e490fb21e54c395537164",
+      "IN": "BRGN_6c58becf76c0499ba4b9cddd0635c797",
+      "IA": "BRGN_89cb7e44737744369bbd1b0003221762",
+      "MI": "BRGN_c50c86e443244b86b30be3cf926248ec",
+      "NJ": "BRGN_276bc96cec234bc0ba92ad4d5254e81e",
+      "PA": "BRGN_503885669ff2458c917e6bb9040158e6",
+      "TN": "BRGN_5cc9cad090944f88916c887ae641f890",
+      "VA": "BRGN_251786de84b3431186621c08a9f77caf",
+      "WV": "BRGN_cd89c3fd7f994780999eae2e94fa77a1",
+      "KS": "BRGN_e3016f8d463349a4af24936ead8749e8",
+      "MA": "BRGN_fe52adefa8444bdeb2cc6417f21bdb14",
+      "NC": "BRGN_9fc0155d79d0483c8f1a4eac43c5fff9"
+    },
+    "sdkRequired": false
   },
   "BetRivers": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Iowa": "BRGN_13996d540c194bfc86607de58b65b4bc",
       "New York": "BRGN_68ba402b7cdf4ac6a015aea60f02ce75",
       "Pennsylvania": "BRGN_b9aecc5ad18644f8a773b00dd34ab03a",
@@ -241,10 +461,25 @@
       "Louisiana": "BRGN_f5886c807a5e41089686709819dbc709",
       "Maryland": "BRGN_6e64b1e0351e414098d69a11eddd277e",
       "Michigan": "BRGN_81b3f3c51e114310b1841ae38a4728c8"
-    }
+    },
+    "bookRegionAbbrId": {
+      "IA": "BRGN_13996d540c194bfc86607de58b65b4bc",
+      "NY": "BRGN_68ba402b7cdf4ac6a015aea60f02ce75",
+      "PA": "BRGN_b9aecc5ad18644f8a773b00dd34ab03a",
+      "OH": "BRGN_ae37058d08ad40c194100b684599c32b",
+      "WV": "BRGN_0e532e3a689f43308b59b77ae92a5c43",
+      "AZ": "BRGN_234af2b3567944afa7a6bc34e25ae563",
+      "CO": "BRGN_35ce569e778542ce8e0336ce28fc1700",
+      "IL": "BRGN_4a238400932846459071df52a42584a6",
+      "IN": "BRGN_5618d1588f6a4570884f72fee14069c8",
+      "LA": "BRGN_f5886c807a5e41089686709819dbc709",
+      "MD": "BRGN_6e64b1e0351e414098d69a11eddd277e",
+      "MI": "BRGN_81b3f3c51e114310b1841ae38a4728c8"
+    },
+    "sdkRequired": true
   },
   "Fanatics": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Ohio": "BRGN_c576657f6a2b4a2ca41253e34f4ea7be",
       "North Carolina": "BRGN_469e7ebae32045739628e8bfab4193f5",
       "New York": "BRGN_b2636851dc9f4a9cb03c8ab1ade5192b",
@@ -260,15 +495,37 @@
       "Maryland": "BRGN_2757c15fc4d14343b7f12b256f9b9b44",
       "Massachusetts": "BRGN_e601af56e1674e6bb5af412e30946856",
       "New Jersey": "BRGN_aa311717b2a64ae386d28347d2dbd566"
-    }
+    },
+    "bookRegionAbbrId": {
+      "OH": "BRGN_c576657f6a2b4a2ca41253e34f4ea7be",
+      "NC": "BRGN_469e7ebae32045739628e8bfab4193f5",
+      "NY": "BRGN_b2636851dc9f4a9cb03c8ab1ade5192b",
+      "IL": "BRGN_55504cab16d2478fac4923676013db38",
+      "TN": "BRGN_3bdb6827efd7443a97e6b056ee1baef4",
+      "VT": "BRGN_e094ebeb623a465ea35f831d610a630c",
+      "VA": "BRGN_8874dceaaf4741cf82318f9095bd6f59",
+      "WV": "BRGN_75e9badb40e84f26b4217018c6c2b622",
+      "PA": "BRGN_abcf715e2cfc4601b9a3ee42044ca419",
+      "CO": "BRGN_14a88d2a8e4747588bf37bf64282f646",
+      "CT": "BRGN_c79d68d44c4e401aa5a1e76072c6151c",
+      "KY": "BRGN_4554ce2cd17f41408bf44c3df46f1d08",
+      "MD": "BRGN_2757c15fc4d14343b7f12b256f9b9b44",
+      "MA": "BRGN_e601af56e1674e6bb5af412e30946856",
+      "NJ": "BRGN_aa311717b2a64ae386d28347d2dbd566"
+    },
+    "sdkRequired": true
   },
   "SugarHouse": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Connecticut": "BRGN_e2ccb679501b4efc836d1b3f3f0658cc"
-    }
+    },
+    "bookRegionAbbrId": {
+      "CT": "BRGN_e2ccb679501b4efc836d1b3f3f0658cc"
+    },
+    "sdkRequired": true
   },
   "Underdog": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Alabama": "BRGN_55349dce4bbe4918ad90a7f8fdddd041",
       "Alaska": "BRGN_60f33d91f57f476e81952f309643c99f",
       "Arizona": "BRGN_bd6dd7f57eea47759706b3547d2ab29e",
@@ -301,18 +558,60 @@
       "Virginia": "BRGN_e1161dabf01144489255671c538c7aa0",
       "Wisconsin": "BRGN_5532d3004db047e591fe48dedee59a80",
       "Wyoming": "BRGN_ad6c647dab3840c6b805b1501df1b334"
-    }
+    },
+    "bookRegionAbbrId": {
+      "AL": "BRGN_55349dce4bbe4918ad90a7f8fdddd041",
+      "AK": "BRGN_60f33d91f57f476e81952f309643c99f",
+      "AZ": "BRGN_bd6dd7f57eea47759706b3547d2ab29e",
+      "AR": "BRGN_17ac99bd3c884738b62b1ffa3fdd32ac",
+      "CA": "BRGN_7e0f3b7a65f04eb3be41581dbe286ab1",
+      "DC": "BRGN_ecb566dba9034eb7ac166fc63c62f022",
+      "FL": "BRGN_19a7f9d298a749dda963fc1728621ac8",
+      "GA": "BRGN_4e0dae577c1342c992c37b96edd15cd5",
+      "IL": "BRGN_8e96f1c8f78d496aa9ffe41ae8e7b81f",
+      "IN": "BRGN_e0fc064df014401fb5b839b8f0e3d15f",
+      "KS": "BRGN_1ea825b8db134064aaea264115ec2cf5",
+      "KY": "BRGN_2bb7b9f2237a4e8d9609d10eea31dfc7",
+      "ME": "BRGN_9aaa611ebd5b44b0889ed3a6f3aea638",
+      "MA": "BRGN_16fc84f997cc4253a255552df40b0912",
+      "MN": "BRGN_b10bcc144d33496e92cb19f18812f35c",
+      "MS": "BRGN_4db6e75fb9fa47518a829e6a374e6580",
+      "NE": "BRGN_708370ad9891490fa2296fee0346c5b3",
+      "NM": "BRGN_46706800477c414f9b5d51993f11ec7a",
+      "NY": "BRGN_1f575e712ade47dfb4891e2959c60250",
+      "NC": "BRGN_6c326578d30a42028937a59ce614b00e",
+      "ND": "BRGN_3d8f0a1cd13f4cc383b25aac5f2a2a3f",
+      "OK": "BRGN_cf20d5e187c344ae8abc5f2e05f15939",
+      "OR": "BRGN_dcc9049bcccb40d5b893aab71501ddd2",
+      "RI": "BRGN_efd8622514074d6bbd06d4ca1abce806",
+      "SC": "BRGN_c03fca3b755442758462189e0bb37a79",
+      "SD": "BRGN_0c51468b28a04990871c496f5ec769ce",
+      "TX": "BRGN_46064152081143139e7f13d2ae3b483e",
+      "UT": "BRGN_4d75b1c442c54dc5803ce38c2e2645bf",
+      "VT": "BRGN_911cb5cf84f64f268d318ddbf355dbb0",
+      "VA": "BRGN_e1161dabf01144489255671c538c7aa0",
+      "WI": "BRGN_5532d3004db047e591fe48dedee59a80",
+      "WY": "BRGN_ad6c647dab3840c6b805b1501df1b334"
+    },
+    "sdkRequired": true
   },
   "BetFred": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Maryland": "BRGN_d96ac50015e7465da6b5d6a23befea75",
       "Ohio": "BRGN_48b1604dc8854c7087f9965dcb4bf97b",
       "Virginia": "BRGN_147e47636d3a4e638006c9d2398d085f",
       "Arizona": "BRGN_c4d4160161ed4299a1081649b84d99ba"
-    }
+    },
+    "bookRegionAbbrId": {
+      "MD": "BRGN_d96ac50015e7465da6b5d6a23befea75",
+      "OH": "BRGN_48b1604dc8854c7087f9965dcb4bf97b",
+      "VA": "BRGN_147e47636d3a4e638006c9d2398d085f",
+      "AZ": "BRGN_c4d4160161ed4299a1081649b84d99ba"
+    },
+    "sdkRequired": false
   },
   "Sleeper": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Alaska": "BRGN_1358c1f6cdad46b0821e1bdba9e5dcdf",
       "Arkansas": "BRGN_ff9b11c86e00446f955012ce0d833efd",
       "California": "BRGN_55911fa4d1034b748162b79fc44c4f5c",
@@ -340,10 +639,40 @@
       "Virginia": "BRGN_3b6ba224518f43fcad276feae7f78a50",
       "Wisconsin": "BRGN_3d9340ce0d25483998e4cf5af777a4c5",
       "Wyoming": "BRGN_9d2d5e7f84854b7fb5881b3424e14ec0"
-    }
+    },
+    "bookRegionAbbrId": {
+      "AK": "BRGN_1358c1f6cdad46b0821e1bdba9e5dcdf",
+      "AR": "BRGN_ff9b11c86e00446f955012ce0d833efd",
+      "CA": "BRGN_55911fa4d1034b748162b79fc44c4f5c",
+      "CO": "BRGN_9474b7f6054d4a4fb57f278eb8b21dc9",
+      "DC": "BRGN_14044d14eeb143af9def612d3b05924a",
+      "FL": "BRGN_e3789979b8f949f58dd9920ba1929aac",
+      "GA": "BRGN_1d1320f48a934bb2823c9a2062632b2f",
+      "IL": "BRGN_b681692ac706400ab17f00e364bd0eee",
+      "KS": "BRGN_ef9e75d59d0d412fa9680195911d1784",
+      "KY": "BRGN_f1b612e9daac4c09aede225b715f8a53",
+      "MA": "BRGN_6c5042ca14634683b69c4df1df87d53a",
+      "MN": "BRGN_f377b29ccee34354bc0d7bcad5dd442a",
+      "NE": "BRGN_5ec798f37c134804ae11fc2918d0050c",
+      "NM": "BRGN_691abc203dfa4cf9ae03f430f386dadd",
+      "NC": "BRGN_dc7fcc73511145188f21f8313981c0dd",
+      "ND": "BRGN_18c708b2556d40998d053e3e58fe0432",
+      "OK": "BRGN_c15f02014c61434c905c5295bd82d6dd",
+      "OR": "BRGN_94ef5e548c764e02b93f6146cd23b667",
+      "RI": "BRGN_b9b933d3901946d093255cb48b769fa3",
+      "SC": "BRGN_7dcdc2b74c534409b892ffc8d993d3d4",
+      "SD": "BRGN_665e9333d40c41458d4f9e3b27fe3844",
+      "TX": "BRGN_5d36b7b664a7452aa7b7c617639cc6e6",
+      "UT": "BRGN_ef5fbce8e3eb4d8c889c36b460bec52e",
+      "VT": "BRGN_b1e87c1a36ef4609a51cfc4a5553afd7",
+      "VA": "BRGN_3b6ba224518f43fcad276feae7f78a50",
+      "WI": "BRGN_3d9340ce0d25483998e4cf5af777a4c5",
+      "WY": "BRGN_9d2d5e7f84854b7fb5881b3424e14ec0"
+    },
+    "sdkRequired": true
   },
   "HardRock": {
-    "bookRegionIds": {
+    "bookRegionId": {
       "Virginia": "BRGN_4ce89e0fe1db44a38399b16ca35942a5",
       "Tennessee": "BRGN_c2d39e3a64374f999a70ef8f990f8346",
       "Ohio": "BRGN_89c5188f35544f41a35cb57287cf6a27",
@@ -352,6 +681,17 @@
       "Indiana": "BRGN_9fa5a17b20484167a2234e94b825c004",
       "Arizona": "BRGN_59704f033e4e4b14978381a61e746947",
       "Florida": "BRGN_0a979f3d28654ed5a254ef01dd654f80"
-    }
+    },
+    "bookRegionAbbrId": {
+      "VA": "BRGN_4ce89e0fe1db44a38399b16ca35942a5",
+      "TN": "BRGN_c2d39e3a64374f999a70ef8f990f8346",
+      "OH": "BRGN_89c5188f35544f41a35cb57287cf6a27",
+      "NJ": "BRGN_f61b55fe42e14270a9be3788f9c38b06",
+      "IA": "BRGN_2df49a5b4e924686a0dd4c9f16661ef1",
+      "IN": "BRGN_9fa5a17b20484167a2234e94b825c004",
+      "AZ": "BRGN_59704f033e4e4b14978381a61e746947",
+      "FL": "BRGN_0a979f3d28654ed5a254ef01dd654f80"
+    },
+    "sdkRequired": true
   }
 }

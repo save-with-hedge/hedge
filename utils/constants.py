@@ -3,3 +3,9 @@ BET_HISTORY_FILE_PREFIX = "bet_history_"
 PERFORMANCE_FILE_PREFIX = "performance_"
 BETSLIP_RESULTS_DATE_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 SHARP_API_REQUEST_DATE_FORMAT = "%Y-%m-%d"
+BOOK_REGIONS_HEDGE_FILENAME = "book_regions_hedge"
+
+# Mongo DB
+MONGO_DB = "hedge"
+MONGO_STATS_COLLECTION = "bettor_stats"
+MONGO_USERS_COLLECTION = "users"
