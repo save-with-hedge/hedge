@@ -14,7 +14,7 @@ LOG_LEVEL=info
 cd $DIR
 source $VENV
 
-exec gunicorn app:app \
+exec gunicorn hedge:app \
   --name $NAME \
   --workers $WORKERS \
   --worker-class $WORKER_CLASS \
