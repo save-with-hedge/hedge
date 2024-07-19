@@ -1,9 +1,14 @@
+import logging
+
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from service.hedge_service import HedgeService
 from api.models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 security = HTTPBasic()
 app = FastAPI()
@@ -22,6 +27,7 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
 
 @app.get("/v1/ping")
 def ping():
+    logger.info("Handling ping request")
     return {"message": "Ping successful!"}
 
 
