@@ -4,6 +4,9 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from service.hedge_service import HedgeService
 from api.models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
+from utils.log import get_logger
+
+LOGGER = get_logger()
 
 security = HTTPBasic()
 app = FastAPI()
@@ -15,6 +18,7 @@ mongo_repository = MongoRepository()
 def authenticate(creds: HTTPBasicCredentials = Depends(security)):
     username = creds.username
     pwd = creds.password
+    LOGGER.info(f"Hedge Controller: Authenticating user {username}")
     return True
     # if mongo_repository.is_admin(username, pwd):
     #     return True
@@ -24,13 +28,8 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
 
 @app.get("/v1/ping")
 def ping():
+    LOGGER.info("Hedge Controller: Received Ping request")
     return {"message": "Ping successful!"}
-
-
-@app.get("/v1/ping-mongo")
-def ping_mongo():
-    response = mongo_repository.ping()
-    return {"mongo_response": response}
 
 
 @app.get("/v1/test-auth")
@@ -39,8 +38,17 @@ def test_auth(is_authenticated=Depends(authenticate)):
         return {"message": "Successfully authenticated!"}
 
 
+@app.get("/v1/bettors")
+def get_bettors(is_authenticated=Depends(authenticate)):
+    LOGGER.info("Hedge Controller: Request to get_bettors")
+    if is_authenticated:
+        bettors = hedge_service.get_bettors()
+        return {"message": bettors}
+
+
 @app.post("/v1/bettors/link")
 def create_account_link(is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None):
+    LOGGER.info("Hedge Controller: Request to create_account_link")
     if is_authenticated:
         if request is None:
             raise HTTPException(

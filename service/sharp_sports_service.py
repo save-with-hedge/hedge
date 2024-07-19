@@ -4,6 +4,9 @@ import os
 
 from dotenv import load_dotenv
 
+from utils.log import get_logger
+
+LOGGER = get_logger()
 
 load_dotenv()
 
@@ -27,7 +30,6 @@ class SharpSportsService:
     def get_book_regions(self):
         url = self.base_url + "/bookRegions?status=active"
         headers = self.get_headers(self.public_api_key)
-        print(headers)
         params = {"status": "active"}
         response = requests.get(url, headers=headers, params=params)
         if response.status_code != 200:
@@ -53,11 +55,11 @@ class SharpSportsService:
         headers = self.get_headers(
             self.private_api_key, {"content-type": "application/json"}
         )
-        print(f"Request: {url}")
+        LOGGER.info(f"Sharp Sports Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        print(f"Response: {response.text}")
+        LOGGER.info(f"Sharp Sports Response: {response.text}")
         if response.status_code != 200:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             raise
         return json.loads(response.text).get("token")
 
@@ -72,11 +74,11 @@ class SharpSportsService:
         headers = self.get_headers(
             self.public_api_key, {"content-type": "application/json"}
         )
-        print(f"Request: {url}")
+        LOGGER.info(f"Sharp Sports Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        print(f"Response: {response.text}")
+        LOGGER.info(f"Sharp Sports Response: {response.text}")
         if response.status_code != 200 and response.status_code != 201:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text).get("cid")
 
@@ -85,7 +87,7 @@ class SharpSportsService:
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
@@ -94,7 +96,7 @@ class SharpSportsService:
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
@@ -103,7 +105,7 @@ class SharpSportsService:
         headers = self.get_headers(self.public_api_key)
         response = requests.post(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             return
 
     def get_betslips_by_bettor(
@@ -120,7 +122,7 @@ class SharpSportsService:
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.info(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
@@ -128,4 +130,4 @@ class SharpSportsService:
 if __name__ == "__main__":
     # For testing only
     service = SharpSportsService()
-    print(service.get_book_regions())
+    LOGGER.info(service.get_book_regions())

@@ -5,6 +5,9 @@ from utils.constants import BOOK_REGIONS_HEDGE_FILENAME
 from utils.user_utils import get_internal_id
 from utils.path_anchor import BOOK_INFO_FOLDER
 from utils.json_utils import read_json
+from utils.log import get_logger
+
+LOGGER = get_logger()
 
 
 class HedgeService:
@@ -20,6 +23,7 @@ class HedgeService:
         try:
             internal_id = self.create_user(request.first, request.last, request.phone)
         except Exception as e:
+            LOGGER.error(e)
             return None, None, "Error creating or fetching user"
 
         # Get bookRegionId and SDK required
@@ -57,6 +61,9 @@ class HedgeService:
         if sdk_required:
             url += "/region/" + book_region_id + "/login"
         return url
+
+    def get_bettors(self):
+        return self.sharp_sports_service.get_bettors()
 
 
 if __name__ == "__main__":

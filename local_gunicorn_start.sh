@@ -5,4 +5,4 @@ PORT=8000
 exec gunicorn hedge:app \
   --workers $WORKERS \
   --worker-class $WORKER_CLASS \
-  --bind 0.0.0.0:$PORT
+  --bind 0.0.0.0:$PORT \

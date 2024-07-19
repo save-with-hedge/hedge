@@ -15,6 +15,9 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION, MONGO_ADMINS_COLLECTION
+from utils.log import get_logger
+
+LOGGER =  get_logger()
 
 load_dotenv()
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
@@ -63,12 +66,14 @@ class MongoRepository:
         })
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
         admin = json.loads(response.text).get("document")
-        # admin = self.admins_collection.find_one({username: {"password": password}})
         if admin:
+            LOGGER.info("User authenticated as admin")
             return True
+        LOGGER.info("Mongo failed to authenticate user as admin")
         return False
 
     def insert_document(self, collection, document):
+        LOGGER.info(f"Inserting mongo document to {collection}")
         url = self.api_url + "/insertOne"
         payload = json.dumps({
             "dataSource": MONGO_CLUSTER,
@@ -77,12 +82,14 @@ class MongoRepository:
             "document": document
         })
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
-        # collection.insert_one(document)
+        if response.status_code not in [200, 201]:
+            LOGGER.error(response.text)
 
     def get_user(self, internal_id):
         """
         :return: A dictionary of user info, or None if the user does not exist
         """
+        LOGGER.info(f"Fetching mongo user {internal_id}")
         url = self.api_url + "/findOne"
         payload = json.dumps({
             "dataSource": MONGO_CLUSTER,
@@ -91,9 +98,11 @@ class MongoRepository:
             "filter": {internal_id: {"$exists": True}}
         })
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        if response.status_code not in [200, 201]:
+            LOGGER.error(response.text)
+        LOGGER.info(f"Mongo response {response.text}")
         response_dict = json.loads(response.text)
         return response_dict.get("document")
-        # return self.users_collection.find_one({internal_id: {"$exists": True}})
 
     def create_user(self, internal_id, first, last, phone):
         document = {
@@ -104,7 +113,6 @@ class MongoRepository:
             }
         }
         self.insert_document(MONGO_USERS_COLLECTION, document)
-        # self.users_collection.insert_one(document)
 
 
 if __name__ == "__main__":
