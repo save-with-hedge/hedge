@@ -1,14 +1,9 @@
-import logging
-
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 
 from service.hedge_service import HedgeService
 from api.models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
-
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 security = HTTPBasic()
 app = FastAPI()
@@ -22,12 +17,12 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
     pwd = creds.password
     if mongo_repository.is_admin(username, pwd):
         return True
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, headers={"WWW-Authenticate": "Basic"})
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not allowed",
+                        headers={"WWW-Authenticate": "Basic"})
 
 
 @app.get("/v1/ping")
 def ping():
-    logger.info("Handling ping request")
     return {"message": "Ping successful!"}
 
 
