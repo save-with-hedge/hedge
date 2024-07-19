@@ -6,6 +6,8 @@ Wrapper around MongoDB for
 """
 
 import certifi
+import json
+import requests
 import os
 
 from dotenv import load_dotenv
@@ -15,6 +17,8 @@ from pymongo.server_api import ServerApi
 from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION, MONGO_ADMINS_COLLECTION
 
 load_dotenv()
+MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
+MONGO_API_KEY = os.getenv("MONGO_API_KEY")
 
 
 class MongoRepository:
@@ -22,6 +26,12 @@ class MongoRepository:
         f"mongodb+srv://{os.getenv("MONGO_USER")}:{os.getenv("MONGO_PASSWORD")}@hedgecluster.mhcxijz.mongodb.net"
         f"/?retryWrites=true&w=majority&appName=HedgeCluster"
     )
+    api_url = "https://us-east-1.aws.data.mongodb-api.com/app/data-ciszpbd/endpoint/data/v1/action"
+    api_headers = headers = {
+        "Content-Type": "application/json",
+        "Access-Control-Request-Headers": "*",
+        "api-key": os.getenv("MONGO_API_KEY"),
+    }
 
     def __init__(self):
         self.client = MongoClient(
@@ -40,7 +50,18 @@ class MongoRepository:
             print(e)
 
     def is_admin(self, username, password):
-        admin = self.admins_collection.find_one({username: {"password": password}})
+        url = self.api_url + "/findOne"
+        payload = json.dumps({
+            "dataSource": MONGO_CLUSTER,
+            "database": MONGO_DB,
+            "collection": MONGO_ADMINS_COLLECTION,
+            "filter": {
+                username: {"password": password}
+            }
+        })
+        response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        admin = json.loads(response.text).get("document")
+        # admin = self.admins_collection.find_one({username: {"password": password}})
         if admin:
             return True
         return False
@@ -69,5 +90,4 @@ class MongoRepository:
 if __name__ == "__main__":
     # For testing locally only
     repository = MongoRepository()
-    repository.ping()
-
+    print(repository.is_admin("fake-user", "pwd"))
