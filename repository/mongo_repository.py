@@ -66,15 +66,32 @@ class MongoRepository:
             return True
         return False
 
-    @staticmethod
-    def insert_document(collection, document):
-        collection.insert_one(document)
+    def insert_document(self, collection, document):
+        url = self.api_url + "/insertOne"
+        payload = json.dumps({
+            "dataSource": MONGO_CLUSTER,
+            "database": MONGO_DB,
+            "collection": collection,
+            "document": document
+        })
+        response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        # collection.insert_one(document)
 
     def get_user(self, internal_id):
         """
         :return: A dictionary of user info, or None if the user does not exist
         """
-        return self.users_collection.find_one({internal_id: {"$exists": True}})
+        url = self.api_url + "/findOne"
+        payload = json.dumps({
+            "dataSource": MONGO_CLUSTER,
+            "database": MONGO_DB,
+            "collection": MONGO_USERS_COLLECTION,
+            "filter": {internal_id: {"$exists": True}}
+        })
+        response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        response_dict = json.loads(response.text)
+        return response_dict.get("document")
+        # return self.users_collection.find_one({internal_id: {"$exists": True}})
 
     def create_user(self, internal_id, first, last, phone):
         document = {
@@ -84,10 +101,12 @@ class MongoRepository:
                 "phone": phone,
             }
         }
-        self.users_collection.insert_one(document)
+        self.insert_document(MONGO_USERS_COLLECTION, document)
+        # self.users_collection.insert_one(document)
 
 
 if __name__ == "__main__":
     # For testing locally only
     repository = MongoRepository()
-    print(repository.is_admin("fake-user", "pwd"))
+    resp = repository.get_user("fake-user")
+    print(resp)
