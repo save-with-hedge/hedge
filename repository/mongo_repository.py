@@ -69,3 +69,5 @@ class MongoRepository:
 if __name__ == "__main__":
     # For testing locally only
     repository = MongoRepository()
+    repository.ping()
+
