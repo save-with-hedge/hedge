@@ -25,6 +25,7 @@ class SharpSportsService:
         if additional_headers:
             for key, value in additional_headers.items():
                 headers[key] = value
+        LOGGER.info(f"Sharp Sports Service: sending headers {headers}")
         return headers
 
     def get_book_regions(self):
