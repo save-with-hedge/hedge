@@ -2,6 +2,11 @@ import json
 import requests
 import os
 
+from dotenv import load_dotenv
+
+
+load_dotenv()
+
 
 class SharpSportsService:
 
@@ -22,6 +27,7 @@ class SharpSportsService:
     def get_book_regions(self):
         url = self.base_url + "/bookRegions?status=active"
         headers = self.get_headers(self.public_api_key)
+        print(headers)
         params = {"status": "active"}
         response = requests.get(url, headers=headers, params=params)
         if response.status_code != 200:
@@ -117,3 +123,8 @@ class SharpSportsService:
             print(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
+
+
+if __name__ == "__main__":
+    service = SharpSportsService()
+    print(service.get_book_regions())
