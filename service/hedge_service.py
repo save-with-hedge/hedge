@@ -57,3 +57,15 @@ class HedgeService:
         if sdk_required:
             url += "/region/" + book_region_id + "/login"
         return url
+
+
+if __name__ == "__main__":
+    service = HedgeService()
+    request = CreateAccountLinkRequest(
+        first="nico",
+        last="colosso",
+        phone="555-555-5555",
+        book="Fanduel",
+        state_abbr="NY",
+    )
+    print(service.create_account_link(request))
