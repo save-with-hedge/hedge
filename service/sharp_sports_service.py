@@ -126,5 +126,6 @@ class SharpSportsService:
 
 
 if __name__ == "__main__":
+    # For testing only
     service = SharpSportsService()
     print(service.get_book_regions())

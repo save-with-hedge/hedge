@@ -60,12 +60,5 @@ class HedgeService:
 
 
 if __name__ == "__main__":
+    # For testing only
     service = HedgeService()
-    request = CreateAccountLinkRequest(
-        first="nico",
-        last="colosso",
-        phone="555-555-5555",
-        book="Fanduel",
-        state_abbr="NY",
-    )
-    print(service.create_account_link(request))
