@@ -6,14 +6,13 @@ Wrapper around MongoDB for
 """
 
 import certifi
-import logging
 import os
 
 from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION
+from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION, MONGO_ADMINS_COLLECTION
 
 load_dotenv()
 
@@ -31,6 +30,7 @@ class MongoRepository:
         self.database = self.client[MONGO_DB]
         self.bettor_stats_collection = self.database[MONGO_STATS_COLLECTION]
         self.users_collection = self.database[MONGO_USERS_COLLECTION]
+        self.admins_collection = self.database[MONGO_ADMINS_COLLECTION]
 
     def ping(self):
         try:
@@ -38,6 +38,16 @@ class MongoRepository:
             print("Ping successful!")
         except Exception as e:
             print(e)
+
+    def is_admin(self, username, password):
+        admin = self.admins_collection.find_one({username: {"password": password}})
+        if admin:
+            return True
+        return False
+
+    @staticmethod
+    def insert_document(collection, document):
+        collection.insert_one(document)
 
     def get_user(self, internal_id):
         """
@@ -57,7 +67,5 @@ class MongoRepository:
 
 
 if __name__ == "__main__":
+    # For testing locally only
     repository = MongoRepository()
-    user = repository.get_user("nico_colosso")
-    if user is None:
-        repository.create_user("nico_colosso", "nico", "colosso", "650-996-3840")
