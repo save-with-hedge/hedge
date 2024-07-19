@@ -43,8 +43,8 @@ def create_account_link(is_authenticated=Depends(authenticate), request: CreateA
             )
         try:
             cid, url, exc_message = hedge_service.create_account_link(request)
-            if exc_message:
-                raise HTTPException(status_code=400, detail=exc_message)
-            return {"cid": cid, "url": url}
+            # if exc_message:
+            #     raise HTTPException(status_code=400, detail=exc_message)
+            return {"cid": cid, "url": url, "exc_message": exc_message}
         except Exception:
             raise
