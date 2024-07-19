@@ -46,8 +46,10 @@ class MongoRepository:
         try:
             self.client.admin.command("ping")
             print("Ping successful!")
+            return "Ping successful!"
         except Exception as e:
             print(e)
+            return str(e)
 
     def is_admin(self, username, password):
         url = self.api_url + "/findOne"

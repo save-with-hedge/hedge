@@ -27,6 +27,12 @@ def ping():
     return {"message": "Ping successful!"}
 
 
+@app.get("/v1/ping-mongo")
+def ping_mongo():
+    response = mongo_repository.ping()
+    return {"mongo_response": response}
+
+
 @app.get("/v1/test-auth")
 def test_auth(is_authenticated=Depends(authenticate)):
     if is_authenticated:
