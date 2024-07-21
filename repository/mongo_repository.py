@@ -17,7 +17,7 @@ from pymongo.server_api import ServerApi
 from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION, MONGO_ADMINS_COLLECTION
 from utils.log import get_logger
 
-LOGGER =  get_logger()
+LOGGER = get_logger()
 
 load_dotenv()
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
@@ -64,7 +64,9 @@ class MongoRepository:
                 username: {"password": password}
             }
         })
+        LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        LOGGER.info(f"Mongo response: {response.text}")
         admin = json.loads(response.text).get("document")
         if admin:
             LOGGER.info("User authenticated as admin")
@@ -81,7 +83,9 @@ class MongoRepository:
             "collection": collection,
             "document": document
         })
+        LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        LOGGER.info(f"Mongo response: {response.text}")
         if response.status_code not in [200, 201]:
             LOGGER.error(response.text)
 
@@ -97,7 +101,9 @@ class MongoRepository:
             "collection": MONGO_USERS_COLLECTION,
             "filter": {internal_id: {"$exists": True}}
         })
+        LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        LOGGER.info(f"Mongo response: {response.text}")
         if response.status_code not in [200, 201]:
             LOGGER.error(response.text)
         LOGGER.info(f"Mongo response {response.text}")

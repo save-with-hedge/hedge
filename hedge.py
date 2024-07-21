@@ -19,6 +19,7 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
     username = creds.username
     pwd = creds.password
     LOGGER.info(f"Hedge Controller: Authenticating user {username}")
+    mongo_repository.is_admin(username, pwd)
     return True
     # if mongo_repository.is_admin(username, pwd):
     #     return True
