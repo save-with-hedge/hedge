@@ -6,7 +6,7 @@ from api.models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
 from utils.log import get_logger
 
-LOGGER = get_logger()
+LOGGER = get_logger(__name__)
 
 security = HTTPBasic()
 app = FastAPI()

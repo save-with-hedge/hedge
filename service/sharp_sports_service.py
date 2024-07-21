@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from utils.log import get_logger
 
-LOGGER = get_logger()
+LOGGER = get_logger(__name__)
 
 load_dotenv()
 

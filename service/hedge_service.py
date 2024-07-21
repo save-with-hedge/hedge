@@ -7,7 +7,7 @@ from utils.path_anchor import BOOK_INFO_FOLDER
 from utils.json_utils import read_json
 from utils.log import get_logger
 
-LOGGER = get_logger()
+LOGGER = get_logger(__name__)
 
 
 class HedgeService:

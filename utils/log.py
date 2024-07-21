@@ -3,9 +3,9 @@ import logging
 from utils.path_anchor import PROJECT_ROOT
 
 
-def get_logger():
+def get_logger(name):
     # return logging.getLogger("gunicorn.error")
-    logger = logging.getLogger(__name__)
+    logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     logger.propagate = False
     path = str(PROJECT_ROOT) + "/logs/python.log"

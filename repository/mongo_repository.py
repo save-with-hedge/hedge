@@ -22,7 +22,7 @@ from utils.constants import (
 )
 from utils.log import get_logger
 
-LOGGER = get_logger()
+LOGGER = get_logger(__name__)
 
 load_dotenv()
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
