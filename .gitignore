@@ -6,5 +6,4 @@ __pycache__/
 
 out/
 
-logs/gunicorn*
-logs/nginx*
+logs/
