@@ -14,7 +14,12 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-from utils.constants import MONGO_DB, MONGO_STATS_COLLECTION, MONGO_USERS_COLLECTION, MONGO_ADMINS_COLLECTION
+from utils.constants import (
+    MONGO_DB,
+    MONGO_STATS_COLLECTION,
+    MONGO_USERS_COLLECTION,
+    MONGO_ADMINS_COLLECTION,
+)
 from utils.log import get_logger
 
 LOGGER = get_logger()
@@ -56,14 +61,14 @@ class MongoRepository:
 
     def is_admin(self, username, password):
         url = self.api_url + "/findOne"
-        payload = json.dumps({
-            "dataSource": MONGO_CLUSTER,
-            "database": MONGO_DB,
-            "collection": MONGO_ADMINS_COLLECTION,
-            "filter": {
-                username: {"password": password}
+        payload = json.dumps(
+            {
+                "dataSource": MONGO_CLUSTER,
+                "database": MONGO_DB,
+                "collection": MONGO_ADMINS_COLLECTION,
+                "filter": {username: {"password": password}},
             }
-        })
+        )
         LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
         LOGGER.info(f"Mongo response: {response.text}")
@@ -77,12 +82,14 @@ class MongoRepository:
     def insert_document(self, collection, document):
         LOGGER.info(f"Inserting mongo document to {collection}")
         url = self.api_url + "/insertOne"
-        payload = json.dumps({
-            "dataSource": MONGO_CLUSTER,
-            "database": MONGO_DB,
-            "collection": collection,
-            "document": document
-        })
+        payload = json.dumps(
+            {
+                "dataSource": MONGO_CLUSTER,
+                "database": MONGO_DB,
+                "collection": collection,
+                "document": document,
+            }
+        )
         LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
         LOGGER.info(f"Mongo response: {response.text}")
@@ -95,12 +102,14 @@ class MongoRepository:
         """
         LOGGER.info(f"Fetching mongo user {internal_id}")
         url = self.api_url + "/findOne"
-        payload = json.dumps({
-            "dataSource": MONGO_CLUSTER,
-            "database": MONGO_DB,
-            "collection": MONGO_USERS_COLLECTION,
-            "filter": {internal_id: {"$exists": True}}
-        })
+        payload = json.dumps(
+            {
+                "dataSource": MONGO_CLUSTER,
+                "database": MONGO_DB,
+                "collection": MONGO_USERS_COLLECTION,
+                "filter": {internal_id: {"$exists": True}},
+            }
+        )
         LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
         LOGGER.info(f"Mongo response: {response.text}")

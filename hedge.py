@@ -21,8 +21,11 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
     LOGGER.info(f"Hedge Controller: Authenticating user {username}")
     if mongo_repository.is_admin(username, pwd):
         return True
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not allowed",
-                        headers={"WWW-Authenticate": "Basic"})
+    raise HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail=f"Failed to authenticate {username}",
+        headers={"WWW-Authenticate": "Basic"},
+    )
 
 
 @app.get("/v1/ping")
@@ -46,7 +49,9 @@ def get_bettors(is_authenticated=Depends(authenticate)):
 
 
 @app.post("/v1/bettors/link")
-def create_account_link(is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None):
+def create_account_link(
+    is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
+):
     LOGGER.info("Hedge Controller: Request to create_account_link")
     if is_authenticated:
         if request is None:

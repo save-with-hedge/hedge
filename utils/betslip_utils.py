@@ -21,7 +21,7 @@ def filter_betslips_by_timestamp(betslips, delta):
     start_date = datetime.today() - delta
     filtered_betslips = []
     for betslip in betslips:
-        if not betslip.get("timeClosed"):   # TODO clean this up
+        if not betslip.get("timeClosed"):  # TODO clean this up
             continue
         date = datetime.strptime(betslip.get("timeClosed"), BETSLIP_RESULTS_DATE_FORMAT)
         if date >= start_date:

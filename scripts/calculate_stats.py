@@ -27,7 +27,7 @@ def calculate_stats(internal_id, fetch, timedelta=None):
     bets_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
     bets = read_json(bets_filepath)
 
-    if len(bets) == 0:   # TODO clean this up
+    if len(bets) == 0:  # TODO clean this up
         return []
 
     # Filter by timedelta
