@@ -19,12 +19,10 @@ def authenticate(creds: HTTPBasicCredentials = Depends(security)):
     username = creds.username
     pwd = creds.password
     LOGGER.info(f"Hedge Controller: Authenticating user {username}")
-    mongo_repository.is_admin(username, pwd)
-    return True
-    # if mongo_repository.is_admin(username, pwd):
-    #     return True
-    # raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not allowed",
-    #                     headers={"WWW-Authenticate": "Basic"})
+    if mongo_repository.is_admin(username, pwd):
+        return True
+    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="You are not allowed",
+                        headers={"WWW-Authenticate": "Basic"})
 
 
 @app.get("/v1/ping")

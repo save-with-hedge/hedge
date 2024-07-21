@@ -69,7 +69,7 @@ class MongoRepository:
         LOGGER.info(f"Mongo response: {response.text}")
         admin = json.loads(response.text).get("document")
         if admin:
-            LOGGER.info("User authenticated as admin")
+            LOGGER.info("Mongo: User authenticated as admin")
             return True
         LOGGER.info("Mongo failed to authenticate user as admin")
         return False
