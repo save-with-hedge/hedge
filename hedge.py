@@ -1,5 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
+from fastapi.middleware.cors import CORSMiddleware
 
 from service.hedge_service import HedgeService
 from api.models import CreateAccountLinkRequest
@@ -12,6 +13,18 @@ security = HTTPBasic()
 app = FastAPI()
 hedge_service = HedgeService()
 mongo_repository = MongoRepository()
+
+allowed_origins = [
+    "http://localhost:3000"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=allowed_origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
+)
 
 
 # TODO improve this authentication method
@@ -52,7 +65,7 @@ def get_bettors(is_authenticated=Depends(authenticate)):
 def create_account_link(
     is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
 ):
-    LOGGER.info("Hedge Controller: Request to create_account_link")
+    LOGGER.info(f"Hedge Controller: Request to create_account_link ${request}")
     if is_authenticated:
         if request is None:
             raise HTTPException(
@@ -60,6 +73,7 @@ def create_account_link(
                 detail="Request body must contain first, last, phone, book, state_abbr",
             )
         try:
+            request.format_inputs()
             cid, url, exc_message = hedge_service.create_account_link(request)
             # if exc_message:
             #     raise HTTPException(status_code=400, detail=exc_message)

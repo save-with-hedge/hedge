@@ -80,7 +80,6 @@ class MongoRepository:
         return False
 
     def insert_document(self, collection, document):
-        LOGGER.info(f"Inserting mongo document to {collection}")
         url = self.api_url + "/insertOne"
         payload = json.dumps(
             {
@@ -100,7 +99,6 @@ class MongoRepository:
         """
         :return: A dictionary of user info, or None if the user does not exist
         """
-        LOGGER.info(f"Fetching mongo user {internal_id}")
         url = self.api_url + "/findOne"
         payload = json.dumps(
             {
@@ -112,10 +110,10 @@ class MongoRepository:
         )
         LOGGER.info(f"Mongo request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
-        LOGGER.info(f"Mongo response: {response.text}")
         if response.status_code not in [200, 201]:
-            LOGGER.error(response.text)
-        LOGGER.info(f"Mongo response {response.text}")
+            LOGGER.error(f"Mongo response: {response.text}")
+        else:
+            LOGGER.info(f"Mongo response: {response.text}")
         response_dict = json.loads(response.text)
         return response_dict.get("document")
 
