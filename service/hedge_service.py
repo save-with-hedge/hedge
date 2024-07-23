@@ -1,3 +1,5 @@
+import json
+
 from api.models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
 from service.sharp_sports_service import SharpSportsService
@@ -64,6 +66,29 @@ class HedgeService:
 
     def get_bettors(self):
         return self.sharp_sports_service.get_bettors()
+
+    @staticmethod
+    def get_books():
+        try:
+            path = BOOK_INFO_FOLDER + "/book_regions_hedge.json"
+            books = read_json(path)
+            book_names = [key for key in books.keys()]
+            return book_names
+        except Exception as e:
+            LOGGER.error(f"Hedge Service error: {e}")
+            return e
+
+    @staticmethod
+    def get_regions_for_book(book_name):
+        try:
+            path = BOOK_INFO_FOLDER + "/book_regions_hedge.json"
+            books = read_json(path)
+            book = books.get(book_name)
+            regions = [key for key in book.get("bookRegionAbbrId").keys()]
+            return regions
+        except Exception as e:
+            LOGGER.error(f"Hedge Service error: {e}")
+            return e
 
 
 if __name__ == "__main__":

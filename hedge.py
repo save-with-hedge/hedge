@@ -75,8 +75,22 @@ def create_account_link(
         try:
             request.format_inputs()
             cid, url, exc_message = hedge_service.create_account_link(request)
-            # if exc_message:
-            #     raise HTTPException(status_code=400, detail=exc_message)
             return {"cid": cid, "url": url, "exc_message": exc_message}
         except Exception:
             raise
+
+
+@app.get("/v1/books")
+def get_books(is_authenticated=Depends(authenticate)):
+    LOGGER.info(f"Hedge Controller: Request to get_books")
+    if is_authenticated:
+        books = hedge_service.get_books()
+        return {"books": books}
+
+
+@app.get("/v1/books/{book_name}/regions")
+def get_regions_for_book(book_name: str, is_authenticated=Depends(authenticate)):
+    LOGGER.info(f"Hedge Controller: Request to get_regions_for_book {book_name}")
+    if is_authenticated:
+        regions = hedge_service.get_regions_for_book(book_name)
+        return {"regions": regions}
