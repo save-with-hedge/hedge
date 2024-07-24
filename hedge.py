@@ -15,8 +15,8 @@ hedge_service = HedgeService()
 mongo_repository = MongoRepository()
 
 allowed_origins = [
-    "http://localhost:3000"
-    "https://hedge-ui.vercel.app"
+    "http://localhost:3000",
+    "https://hedge-ui.vercel.app",
     "https://savewithhedge.co"
 ]
 
