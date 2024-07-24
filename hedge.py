@@ -16,6 +16,8 @@ mongo_repository = MongoRepository()
 
 allowed_origins = [
     "http://localhost:3000"
+    "https://hedge-ui.vercel.app"
+    "https://savewithhedge.co"
 ]
 
 app.add_middleware(
