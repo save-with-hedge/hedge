@@ -1,21 +1,17 @@
 """
+Fetch a user's raw betslips from Sharp Sports and write the results to json
 Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
-
-import os
-import sys
-from dotenv import load_dotenv
-
 from service.sharp_sports_service import SharpSportsService
-from utils.constants import INTERNAL_ID_NICO
-from utils.json_utils import write_json
-from utils.path_anchor import BETSLIPS_RAW_FOLDER, BETSLIPS_FORMATTED_FOLDER
+from utils.json_utils import read_json, write_json
+from utils.log import get_logger
+from utils.path_anchor import BETSLIPS_RAW_FOLDER
 
-load_dotenv()
+LOGGER = get_logger(__name__)
 
 
-def fetch_betslips(internal_id):
+def fetch_betslips(internal_id, refresh):
     """
     Fetch betslips from Sharp Sports and write raw betslips to json.
     """
@@ -23,77 +19,24 @@ def fetch_betslips(internal_id):
     betsync_client = SharpSportsService()
 
     # Refresh bettor accounts
-    betsync_client.refresh_bettor(internal_id)
+    if refresh:
+        betsync_client.refresh_bettor(internal_id)
 
     # Pull betslips and write to file
     betslips = betsync_client.get_betslips_by_bettor(internal_id)
+    if betslips is None or len(betslips) == 0:
+        return []
+
     filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
     write_json(filepath, betslips)
-    print(f"Wrote {len(betslips)} rows to file {filepath}")
-
     return betslips
 
 
-def format_bets(raw_betslips, internal_id):
+def fetch_local_betslips(internal_id):
     """
-    Format the raw betslips from Sharp Sports and write to json.
+    Fetch betslips from local out/ folder and return
     """
-    formatted_bets = []
-    for betslip in raw_betslips:
-        formatted_bet = {
-            "book": betslip.get("book").get("name"),
-            "timePlaced": betslip.get("timePlaced"),
-            "timeClosed": betslip.get("timeClosed"),
-            "selection": "",
-            "sport": "",
-            "betType": "",
-            "propDetails": "",
-            "odds": betslip.get("oddsAmerican"),
-            "wager": float(betslip.get("atRisk")) / 100,
-            "result": betslip.get("outcome"),
-            "return": float(betslip.get("netProfit")) / 100,
-        }
-        if betslip.get("type") == "single":
-            bet = betslip.get("bets")[0]
-            formatted_bet["selection"] = bet.get("bookDescription")
-            if bet.get("event"):
-                formatted_bet["sport"] = bet.get("event").get("sport")
-            if not bet.get("type"):
-                formatted_bet["betType"] = "other"
-            if bet.get("type") == "straight":
-                formatted_bet["betType"] = bet.get("proposition")
-            elif bet.get("type") == "prop":
-                formatted_bet["betType"] = "other"
-                formatted_bet["propDetails"] = bet.get("propDetails")
-        elif betslip.get("type") == "parlay":
-            formatted_bet["selection"] = "parlay"
-            formatted_bet["sport"] = "parlay"
-            formatted_bet["betType"] = "parlay"
-        formatted_bets.append(formatted_bet)
-
-    json_filepath = BETSLIPS_FORMATTED_FOLDER + "/" + internal_id + ".json"
-    write_json(json_filepath, formatted_bets)
-    print(f"Wrote {len(formatted_bets)} rows to file {json_filepath}")
-
-    return formatted_bets
-
-
-def print_usage():
-    print(
-        f"\nUsage:\n\npython3 betsync/fetch_betslips.py [user_id (default: ncolosso)]\n"
-    )
-
-
-if __name__ == "__main__":
-
-    if len(sys.argv) > 1 and sys.argv[1].lower() == "help":
-        print_usage()
-        exit()
-
-    internal_id = INTERNAL_ID_NICO
-    if len(sys.argv) > 1:
-        internal_id = sys.argv[1]
-
-    raw_betslips = fetch_betslips(internal_id)
-    # raw_betslips = read_json(BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json")
-    formatted_bets = format_bets(raw_betslips, internal_id)
+    LOGGER.info(f"fetch_betslips: Fetching local betslips for {internal_id}")
+    filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
+    betslips = read_json(filepath)
+    return betslips

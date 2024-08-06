@@ -11,3 +11,7 @@ class CreateAccountLinkRequest(BaseModel):
     def format_inputs(self):
         self.state_abbr = self.state_abbr.upper()
         self.book = self.book[0].upper() + self.book[1:]
+
+
+class GetStatsForBettorRequest(BaseModel):
+    refresh: bool

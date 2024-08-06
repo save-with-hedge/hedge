@@ -6,7 +6,7 @@ SHARP_API_REQUEST_DATE_FORMAT = "%Y-%m-%d"
 BOOK_REGIONS_HEDGE_FILENAME = "book_regions_hedge"
 
 # Mongo DB
-MONGO_DB = "hedge"
 MONGO_STATS_COLLECTION = "bettor_stats"
+MONGO_HISTORY_COLLECTION = "bettor_history"
 MONGO_USERS_COLLECTION = "users"
 MONGO_ADMINS_COLLECTION = "admins"

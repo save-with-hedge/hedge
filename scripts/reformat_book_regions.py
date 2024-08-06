@@ -1,5 +1,6 @@
 """
-Format book regions so the bookRegionId is more easily accessible by book and state, as such
+This is a one-time script to transform Sharp Sports book regions into the below format, outputted to the
+book_info/book_regions_hedge.json file.
 {
     "Fanduel": {
         "bookRegionId": {

@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from models.hedge_betslip import HedgeBetslip
 from utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
 
 
@@ -11,7 +12,7 @@ def get_past_date_formatted(delta):
     return past_date.strftime(SHARP_API_REQUEST_DATE_FORMAT)
 
 
-def filter_betslips_by_timestamp(betslips, delta):
+def filter_betslips_by_timestamp(betslips: list[HedgeBetslip], delta):
     """
     This algo is not optimized for performance, but should be fine for the time being
     :param betslips: dictionary of betslips
@@ -21,39 +22,39 @@ def filter_betslips_by_timestamp(betslips, delta):
     start_date = datetime.today() - delta
     filtered_betslips = []
     for betslip in betslips:
-        if not betslip.get("timeClosed"):  # TODO clean this up
+        if not betslip.time_closed:  # TODO clean this up
             continue
-        date = datetime.strptime(betslip.get("timeClosed"), BETSLIP_RESULTS_DATE_FORMAT)
+        date = datetime.strptime(betslip.time_closed, BETSLIP_RESULTS_DATE_FORMAT)
         if date >= start_date:
             filtered_betslips.append(betslip)
     return filtered_betslips
 
 
-def group_betslips_by_bet_type(betslips):
+def group_betslips_by_bet_type(betslips: list[HedgeBetslip]) -> dict[str, list[HedgeBetslip]]:
     """
-    Return a dictionary where each key is a betType and each value is the list of betSlips for that betType
-    :param betslips: dictionary of betslips
+    Return a dictionary where each key is a betType and each value is the list of HedgeBetslips for that betType
+    :param betslips: list of HedgeBetslips
     """
     grouped_betslips = {}
     for betslip in betslips:
-        bet_type = betslip.get("betType")
+        bet_type = betslip.bet_type
         if bet_type not in grouped_betslips:
             grouped_betslips[bet_type] = []
         grouped_betslips[bet_type].append(betslip)
     return grouped_betslips
 
 
-def calculate_avg_unit_size(betslips):
+def calculate_avg_unit_size(betslips: list[HedgeBetslip]):
     """
     :param betslips: dictionary of betslips
     """
     wager_sum = 0
     for betslip in betslips:
-        wager_sum += float(betslip.get("wager"))
+        wager_sum += float(betslip.wager)
     return round(wager_sum / len(betslips), 2)
 
 
-def calculate_roi(betslips):
+def calculate_roi(betslips: list[HedgeBetslip]):
     """
     ROI = net return as a % of total wager
     :param betslips: dictionary of betslips
@@ -61,8 +62,8 @@ def calculate_roi(betslips):
     wager_sum = 0
     net_return = 0
     for betslip in betslips:
-        wager_sum += float(betslip.get("wager"))
-        net_return += float(betslip.get("return"))
+        wager_sum += float(betslip.wager)
+        net_return += float(betslip.earnings)
     return round((100 * net_return / wager_sum), 2)
 
 

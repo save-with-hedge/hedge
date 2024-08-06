@@ -15,17 +15,18 @@ from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
 from utils.constants import (
-    MONGO_DB,
     MONGO_STATS_COLLECTION,
+    MONGO_HISTORY_COLLECTION,
     MONGO_USERS_COLLECTION,
     MONGO_ADMINS_COLLECTION,
 )
 from utils.log import get_logger
 
-LOGGER = get_logger(__name__)
+LOGGER = get_logger("MongoRepository")
 
 load_dotenv()
 MONGO_CLUSTER = os.getenv("MONGO_CLUSTER")
+MONGO_DB = os.getenv("MONGO_DB")
 MONGO_API_KEY = os.getenv("MONGO_API_KEY")
 
 
@@ -59,27 +60,7 @@ class MongoRepository:
             print(e)
             return str(e)
 
-    def is_admin(self, username, password):
-        url = self.api_url + "/findOne"
-        payload = json.dumps(
-            {
-                "dataSource": MONGO_CLUSTER,
-                "database": MONGO_DB,
-                "collection": MONGO_ADMINS_COLLECTION,
-                "filter": {username: {"password": password}},
-            }
-        )
-        LOGGER.info(f"Mongo request: {url}")
-        response = requests.request("POST", url, headers=self.api_headers, data=payload)
-        LOGGER.info(f"Mongo response: {response.text}")
-        admin = json.loads(response.text).get("document")
-        if admin:
-            LOGGER.info("Mongo: User authenticated as admin")
-            return True
-        LOGGER.info("Mongo failed to authenticate user as admin")
-        return False
-
-    def insert_document(self, collection, document):
+    def _insert_document(self, collection, document):
         url = self.api_url + "/insertOne"
         payload = json.dumps(
             {
@@ -89,47 +70,86 @@ class MongoRepository:
                 "document": document,
             }
         )
-        LOGGER.info(f"Mongo request: {url}")
+        LOGGER.info(f"Request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
-        LOGGER.info(f"Mongo response: {response.text}")
+        LOGGER.info(f"Response: {response.text}")
         if response.status_code not in [200, 201]:
             LOGGER.error(response.text)
 
-    def get_user(self, internal_id):
-        """
-        :return: A dictionary of user info, or None if the user does not exist
-        """
+    def upsert_document(self, collection, internal_id, document):
+        url = self.api_url + "/updateOne"
+        payload = json.dumps(
+            {
+                "dataSource": MONGO_CLUSTER,
+                "database": MONGO_DB,
+                "collection": collection,
+                "filter": {"internal_id": internal_id},
+                "update": document,
+                "upsert": True,
+            }
+        )
+        LOGGER.info(f"Request: {url}")
+        response = requests.request("POST", url, headers=self.api_headers, data=payload)
+        LOGGER.info(f"Response: {response.text}")
+        if response.status_code not in [200, 201]:
+            LOGGER.error(response.text)
+
+    def _find_document(self, collection, search_filter):
         url = self.api_url + "/findOne"
         payload = json.dumps(
             {
                 "dataSource": MONGO_CLUSTER,
                 "database": MONGO_DB,
-                "collection": MONGO_USERS_COLLECTION,
-                "filter": {internal_id: {"$exists": True}},
+                "collection": collection,
+                "filter": search_filter,
             }
         )
-        LOGGER.info(f"Mongo request: {url}")
+        LOGGER.info(f"Request: {url}")
         response = requests.request("POST", url, headers=self.api_headers, data=payload)
         if response.status_code not in [200, 201]:
-            LOGGER.error(f"Mongo response: {response.text}")
+            LOGGER.error(f"Response: {response.text}")
         else:
-            LOGGER.info(f"Mongo response: {response.text}")
+            LOGGER.info(f"Response: {response.text}")
         response_dict = json.loads(response.text)
         return response_dict.get("document")
 
+    def is_admin(self, username, password):
+        is_admin = self._find_document(MONGO_ADMINS_COLLECTION, {"username": username, "password": password})
+        if is_admin:
+            LOGGER.info("Mongo: User authenticated as admin")
+            return True
+        LOGGER.info("Mongo failed to authenticate user as admin")
+        return False
+
+    def get_stats_for_user(self, internal_id):
+        """
+        :return: A dictionary of stats info for a user, or None if the document does not exist
+        """
+        return self._find_document(MONGO_STATS_COLLECTION, {"internal_id": internal_id})
+
+    def get_history_for_user(self, internal_id):
+        """
+        :return: A dictionary of bet history for a user, or None if the document does not exist
+        """
+        return self._find_document(MONGO_HISTORY_COLLECTION, {"internal_id": internal_id})
+
+    def get_user(self, internal_id):
+        """
+        :return: A dictionary of user info, or None if the user does not exist
+        """
+        return self._find_document(MONGO_USERS_COLLECTION, {"internal_id": internal_id})
+
     def create_user(self, internal_id, first, last, phone):
         document = {
-            internal_id: {
-                "first": first,
-                "last": last,
-                "phone": phone,
-            }
+            "internal_id": internal_id,
+            "first": first,
+            "last": last,
+            "phone": phone,
         }
-        self.insert_document(MONGO_USERS_COLLECTION, document)
+        self._insert_document(MONGO_USERS_COLLECTION, document)
 
 
 if __name__ == "__main__":
     # For testing locally only
     repository = MongoRepository()
-    resp = repository.get_user("fake-user")
-    print(resp)
+    repository.create_user("ncolosso", "Nico", "Colosso", 6509963840)

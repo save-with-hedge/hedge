@@ -1,15 +1,18 @@
-import json
+import datetime
 
-from api.models import CreateAccountLinkRequest
+from models.api.api_models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
+from scripts.calculate_stats import calculate_stats
+from scripts.format_betslips import format_betslips
 from service.sharp_sports_service import SharpSportsService
-from utils.constants import BOOK_REGIONS_HEDGE_FILENAME
+from utils.betslip_utils import get_ytd_timedelta, filter_betslips_by_timestamp
+from utils.constants import BOOK_REGIONS_HEDGE_FILENAME, MONGO_STATS_COLLECTION, MONGO_HISTORY_COLLECTION
 from utils.user_utils import get_internal_id
 from utils.path_anchor import BOOK_INFO_FOLDER
 from utils.json_utils import read_json
 from utils.log import get_logger
 
-LOGGER = get_logger(__name__)
+LOGGER = get_logger("HedgeService")
 
 
 class HedgeService:
@@ -30,7 +33,7 @@ class HedgeService:
 
         # Get bookRegionId and SDK required
         book_regions_path = (
-            BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
+                BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
         )
         book_regions = read_json(book_regions_path)
         book_region_id = (
@@ -75,7 +78,7 @@ class HedgeService:
             book_names = [key for key in books.keys()]
             return book_names
         except Exception as e:
-            LOGGER.error(f"Hedge Service error: {e}")
+            LOGGER.error(f"{e}")
             return e
 
     @staticmethod
@@ -87,10 +90,68 @@ class HedgeService:
             regions = [key for key in book.get("bookRegionAbbrId").keys()]
             return regions
         except Exception as e:
-            LOGGER.error(f"Hedge Service error: {e}")
+            LOGGER.error(f"{e}")
             return e
+
+    @staticmethod
+    def _refresh_stats_for_bettor(internal_id, timedelta, refresh=False):
+        """
+        Calculate stats for each bettor
+        :return: formatted and time-filtered betslips and grouped bettor stats
+        """
+        formatted_betslips = format_betslips(internal_id, refresh=refresh)
+        formatted_betslips = filter_betslips_by_timestamp(formatted_betslips, timedelta)
+        if len(formatted_betslips) == 0:
+            return [], None
+        bettor_stats = calculate_stats(formatted_betslips)
+        return formatted_betslips, bettor_stats
+
+    def refresh_stats_for_bettor(self, internal_id):
+        time_now = datetime.datetime.now().strftime("%H:%M:%S %m/%d/%Y")
+        betslips_ytd, stats_ytd = self._refresh_stats_for_bettor(internal_id, timedelta=get_ytd_timedelta(),
+                                                                 refresh=True)
+        betslips_7d, stats_7d = self._refresh_stats_for_bettor(internal_id, datetime.timedelta(days=7))
+        if len(betslips_ytd) == 0:
+            LOGGER.info(f"No betslips found for {internal_id} YTD")
+        elif len(betslips_7d) == 0:
+            LOGGER.info(f"No betslips found for {internal_id} in last 7d")
+        history_mongo_document = {
+            "internal_id": internal_id,
+            "refresh_time": time_now,
+            "history_7d": [betslip.to_dict() for betslip in betslips_7d],
+            "history_ytd": [betslip.to_dict() for betslip in betslips_ytd],
+        }
+        self.mongo_repository.upsert_document(MONGO_HISTORY_COLLECTION, internal_id, history_mongo_document)
+        stats_mongo_document = {
+            "internal_id": internal_id,
+            "refresh_time": time_now,
+            "stats_7d": stats_7d,
+            "stats_ytd": stats_ytd,
+        }
+        self.mongo_repository.upsert_document(MONGO_STATS_COLLECTION, internal_id, stats_mongo_document)
+
+    def refresh_stats_all(self):
+        bettors = self.get_bettors()
+        for bettor in bettors:
+            self.refresh_stats_for_bettor(bettor.get("internalId"))
+
+    def get_stats_for_bettor(self, internal_id):
+        return self.mongo_repository.get_stats_for_user(internal_id)
+
+    def get_stats_all(self):
+        all_stats = []
+        bettors = self.get_bettors()
+        for bettor in bettors:
+            stats = self.get_stats_for_bettor(bettor.get("internalId"))
+            if stats:
+                all_stats.append(stats)
+        return all_stats
+
+    def get_history_for_bettor(self, internal_id):
+        return self.mongo_repository.get_history_for_user(internal_id)
 
 
 if __name__ == "__main__":
     # For testing only
     service = HedgeService()
+    service.get_history_for_bettor("ncolosso")

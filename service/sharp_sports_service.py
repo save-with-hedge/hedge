@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 from utils.log import get_logger
 
-LOGGER = get_logger(__name__)
+LOGGER = get_logger("SharpSportsService")
 
 load_dotenv()
 
@@ -25,7 +25,7 @@ class SharpSportsService:
         if additional_headers:
             for key, value in additional_headers.items():
                 headers[key] = value
-        LOGGER.info(f"Sharp Sports Service: sending headers {headers}")
+        LOGGER.info(f"Sending headers {headers}")
         return headers
 
     def get_book_regions(self):
@@ -56,15 +56,16 @@ class SharpSportsService:
         headers = self.get_headers(
             self.private_api_key, {"content-type": "application/json"}
         )
-        LOGGER.info(f"Sharp Sports Request: {url}")
+        LOGGER.info(f"Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        LOGGER.info(f"Sharp Sports Response: {response.text}")
+        LOGGER.info(f"Response: {response.text}")
         if response.status_code != 200:
             LOGGER.info(f"{response.status_code} - {response.text}")
             raise
         return json.loads(response.text).get("token")
 
     def create_context(self, internal_id, auth_token=None):
+        LOGGER.info(f"Create context for {internal_id}")
         url = self.base_url + "/context"
         payload = {
             "uiMode": "system",
@@ -75,15 +76,16 @@ class SharpSportsService:
         headers = self.get_headers(
             self.public_api_key, {"content-type": "application/json"}
         )
-        LOGGER.info(f"Sharp Sports Request: {url}")
+        LOGGER.info(f"Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        LOGGER.info(f"Sharp Sports Response: {response.text}")
+        LOGGER.info(f"Response: {response.text}")
         if response.status_code != 200 and response.status_code != 201:
             LOGGER.info(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text).get("cid")
 
     def get_bettors(self):
+        LOGGER.info("Get bettors")
         url = self.base_url + "/bettors"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
@@ -93,6 +95,7 @@ class SharpSportsService:
         return json.loads(response.text)
 
     def get_bettor_accounts(self, internal_id):
+        LOGGER.info("Get bettor accounts")
         url = self.base_url + "/bettors/" + internal_id + "/bettorAccounts"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
@@ -102,6 +105,7 @@ class SharpSportsService:
         return json.loads(response.text)
 
     def refresh_bettor(self, internal_id):
+        LOGGER.info(f"Refresh bettor {internal_id}")
         url = self.base_url + "/bettors/" + internal_id + "/refresh"
         headers = self.get_headers(self.public_api_key)
         response = requests.post(url, headers=headers)
@@ -112,6 +116,7 @@ class SharpSportsService:
     def get_betslips_by_bettor(
         self, internal_id, status="completed", start_date=None, end_date=None
     ):
+        LOGGER.info(f"Get betslips for {internal_id}")
         url = self.base_url + "/bettors/" + internal_id + "/betSlips"
         url += f"?status={status}"
         if start_date:
