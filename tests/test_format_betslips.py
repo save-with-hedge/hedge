@@ -5,7 +5,7 @@ mock_raw_betslip_single = {
     "book": {
         "id": "BOOK_1aac80eb006640bd9722eb25ae73845a",
         "name": "Underdog",
-        "abbr": "ud"
+        "abbr": "ud",
     },
     "timePlaced": None,
     "type": "single",
@@ -26,11 +26,7 @@ mock_raw_betslip_single = {
 }
 
 mock_raw_betslip_parlay = {
-    "book": {
-        "id": "BOOK_Rf7xRhS7TKQUl94Xkt5w",
-        "name": "Fanduel",
-        "abbr": "fd"
-    },
+    "book": {"id": "BOOK_Rf7xRhS7TKQUl94Xkt5w", "name": "Fanduel", "abbr": "fd"},
     "timePlaced": "2024-04-26T00:49:26Z",
     "type": "parlay",
     "oddsAmerican": 1572,

@@ -17,7 +17,7 @@ mongo_repository = MongoRepository()
 allowed_origins = [
     "http://localhost:3000",
     "https://savewithhedge.vercel.app",
-    "https://www.savewithhedge.co"
+    "https://www.savewithhedge.co",
 ]
 
 app.add_middleware(
@@ -25,7 +25,7 @@ app.add_middleware(
     allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
-    allow_headers=["*"]
+    allow_headers=["*"],
 )
 
 
@@ -64,8 +64,11 @@ def get_bettors(is_authenticated=Depends(authenticate)):
 
 
 @app.get("/v1/bettors/{internal_id}/stats")
-def get_stats_for_bettor(internal_id: str, request: GetStatsForBettorRequest = None,
-                         is_authenticated=Depends(authenticate)):
+def get_stats_for_bettor(
+    internal_id: str,
+    request: GetStatsForBettorRequest = None,
+    is_authenticated=Depends(authenticate),
+):
     LOGGER.info(f"Request to get_stats_for_bettor {internal_id}")
     if is_authenticated:
         if request and request.refresh:
@@ -103,8 +106,11 @@ def get_stats_all(is_authenticated=Depends(authenticate)):
 
 
 @app.get("/v1/bettors/{internal_id}/history")
-def get_history_for_bettor(internal_id: str, request: GetStatsForBettorRequest = None,
-                           is_authenticated=Depends(authenticate)):
+def get_history_for_bettor(
+    internal_id: str,
+    request: GetStatsForBettorRequest = None,
+    is_authenticated=Depends(authenticate),
+):
     LOGGER.info(f"Request to get_history_for_bettor {internal_id}")
     if is_authenticated:
         if request and request.refresh:
@@ -122,7 +128,7 @@ def get_history_for_bettor(internal_id: str, request: GetStatsForBettorRequest =
 
 @app.post("/v1/bettors/link")
 def create_account_link(
-        is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
+    is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
 ):
     LOGGER.info(f"Request to create_account_link ${request}")
     if is_authenticated:

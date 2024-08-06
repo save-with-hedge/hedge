@@ -3,6 +3,7 @@ Fetch a user's raw betslips from Sharp Sports and write the results to json
 Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
+
 from service.sharp_sports_service import SharpSportsService
 from utils.json_utils import read_json, write_json
 from utils.log import get_logger

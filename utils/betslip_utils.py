@@ -30,7 +30,9 @@ def filter_betslips_by_timestamp(betslips: list[HedgeBetslip], delta):
     return filtered_betslips
 
 
-def group_betslips_by_bet_type(betslips: list[HedgeBetslip]) -> dict[str, list[HedgeBetslip]]:
+def group_betslips_by_bet_type(
+    betslips: list[HedgeBetslip],
+) -> dict[str, list[HedgeBetslip]]:
     """
     Return a dictionary where each key is a betType and each value is the list of HedgeBetslips for that betType
     :param betslips: list of HedgeBetslips

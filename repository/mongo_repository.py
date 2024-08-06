@@ -114,7 +114,9 @@ class MongoRepository:
         return response_dict.get("document")
 
     def is_admin(self, username, password):
-        is_admin = self._find_document(MONGO_ADMINS_COLLECTION, {"username": username, "password": password})
+        is_admin = self._find_document(
+            MONGO_ADMINS_COLLECTION, {"username": username, "password": password}
+        )
         if is_admin:
             LOGGER.info("Mongo: User authenticated as admin")
             return True
@@ -131,7 +133,9 @@ class MongoRepository:
         """
         :return: A dictionary of bet history for a user, or None if the document does not exist
         """
-        return self._find_document(MONGO_HISTORY_COLLECTION, {"internal_id": internal_id})
+        return self._find_document(
+            MONGO_HISTORY_COLLECTION, {"internal_id": internal_id}
+        )
 
     def get_user(self, internal_id):
         """

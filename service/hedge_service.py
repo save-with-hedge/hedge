@@ -6,7 +6,11 @@ from scripts.calculate_stats import calculate_stats
 from scripts.format_betslips import format_betslips
 from service.sharp_sports_service import SharpSportsService
 from utils.betslip_utils import get_ytd_timedelta, filter_betslips_by_timestamp
-from utils.constants import BOOK_REGIONS_HEDGE_FILENAME, MONGO_STATS_COLLECTION, MONGO_HISTORY_COLLECTION
+from utils.constants import (
+    BOOK_REGIONS_HEDGE_FILENAME,
+    MONGO_STATS_COLLECTION,
+    MONGO_HISTORY_COLLECTION,
+)
 from utils.user_utils import get_internal_id
 from utils.path_anchor import BOOK_INFO_FOLDER
 from utils.json_utils import read_json
@@ -33,7 +37,7 @@ class HedgeService:
 
         # Get bookRegionId and SDK required
         book_regions_path = (
-                BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
+            BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
         )
         book_regions = read_json(book_regions_path)
         book_region_id = (
@@ -108,9 +112,12 @@ class HedgeService:
 
     def refresh_stats_for_bettor(self, internal_id):
         time_now = datetime.datetime.now().strftime("%H:%M:%S %m/%d/%Y")
-        betslips_ytd, stats_ytd = self._refresh_stats_for_bettor(internal_id, timedelta=get_ytd_timedelta(),
-                                                                 refresh=True)
-        betslips_7d, stats_7d = self._refresh_stats_for_bettor(internal_id, datetime.timedelta(days=7))
+        betslips_ytd, stats_ytd = self._refresh_stats_for_bettor(
+            internal_id, timedelta=get_ytd_timedelta(), refresh=True
+        )
+        betslips_7d, stats_7d = self._refresh_stats_for_bettor(
+            internal_id, datetime.timedelta(days=7)
+        )
         if len(betslips_ytd) == 0:
             LOGGER.info(f"No betslips found for {internal_id} YTD")
         elif len(betslips_7d) == 0:
@@ -121,14 +128,18 @@ class HedgeService:
             "history_7d": [betslip.to_dict() for betslip in betslips_7d],
             "history_ytd": [betslip.to_dict() for betslip in betslips_ytd],
         }
-        self.mongo_repository.upsert_document(MONGO_HISTORY_COLLECTION, internal_id, history_mongo_document)
+        self.mongo_repository.upsert_document(
+            MONGO_HISTORY_COLLECTION, internal_id, history_mongo_document
+        )
         stats_mongo_document = {
             "internal_id": internal_id,
             "refresh_time": time_now,
             "stats_7d": stats_7d,
             "stats_ytd": stats_ytd,
         }
-        self.mongo_repository.upsert_document(MONGO_STATS_COLLECTION, internal_id, stats_mongo_document)
+        self.mongo_repository.upsert_document(
+            MONGO_STATS_COLLECTION, internal_id, stats_mongo_document
+        )
 
     def refresh_stats_all(self):
         bettors = self.get_bettors()

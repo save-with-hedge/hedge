@@ -13,13 +13,19 @@ def format_betslips(internal_id, fetch=True, refresh=False) -> List[HedgeBetslip
     Format a user's raw json betslips into Hedge format
     :return: A list of HedgeBetslip objects
     """
-    raw_betslips = fetch_betslips(internal_id, refresh) if fetch else fetch_local_betslips(internal_id)
+    raw_betslips = (
+        fetch_betslips(internal_id, refresh)
+        if fetch
+        else fetch_local_betslips(internal_id)
+    )
     formatted_betslips = []
     for betslip in raw_betslips:
         try:
             formatted_betslips.append(format_betslip(betslip))
         except Exception as e:
-            LOGGER.error(f"format_betslips: Error formatting {internal_id} betslip {betslip.get('id')}: {e}")
+            LOGGER.error(
+                f"format_betslips: Error formatting {internal_id} betslip {betslip.get('id')}: {e}"
+            )
     return formatted_betslips
 
 
@@ -36,7 +42,9 @@ def format_betslip(raw_betslip):
     elif betslip_type == "parlay":
         return get_parlay_type_hedge_object(raw_betslip)
     else:
-        raise Exception(f"Betslip type {betslip_type} not supported (only single and parlay allowed)")
+        raise Exception(
+            f"Betslip type {betslip_type} not supported (only single and parlay allowed)"
+        )
 
 
 def get_single_type_hedge_object(raw_betslip):
@@ -120,7 +128,9 @@ def format_result(raw_outcome):
     elif raw_outcome == "push":
         return Result.push
     else:
-        raise Exception(f"Betslip outcome {raw_outcome} not supported (only win, loss, push allowed)")
+        raise Exception(
+            f"Betslip outcome {raw_outcome} not supported (only win, loss, push allowed)"
+        )
 
 
 def _get_attr(dict_obj, attr, default=None):

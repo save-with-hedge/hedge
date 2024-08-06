@@ -18,18 +18,22 @@ def calculate_stats(betslips: list[HedgeBetslip]):
     return stats_list
 
 
-def get_stats_for_bets_grouped(all_betslips: list[HedgeBetslip], betslips_grouped: dict[str, list[HedgeBetslip]]):
+def get_stats_for_bets_grouped(
+    all_betslips: list[HedgeBetslip], betslips_grouped: dict[str, list[HedgeBetslip]]
+):
     """
     Calculate stats by bet type and return dictionary and list representations
     :return: a dict (only used for appending to bet history) and list representation of stats by bet type
     """
     stats = {}
-    stats_list = [{
-        "betType": "total",
-        "avgUnit": calculate_avg_unit_size(all_betslips),
-        "roi": calculate_roi(all_betslips),
-        "total_bets": len(all_betslips),
-    }]
+    stats_list = [
+        {
+            "betType": "total",
+            "avgUnit": calculate_avg_unit_size(all_betslips),
+            "roi": calculate_roi(all_betslips),
+            "total_bets": len(all_betslips),
+        }
+    ]
     for bet_type in betslips_grouped:
         stats[bet_type] = {
             "avgUnit": calculate_avg_unit_size(betslips_grouped.get(bet_type)),
