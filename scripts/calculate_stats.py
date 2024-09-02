@@ -9,6 +9,9 @@ def calculate_stats(betslips: list[HedgeBetslip]):
     For the given user and timedelta, calculate average unit size and ROI by bet type and write the results to
     json and csv
     """
+    if len(betslips) == 0:
+        return []
+
     # Group by bet type
     betslips_grouped = group_betslips_by_bet_type(betslips)
 

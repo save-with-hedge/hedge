@@ -12,9 +12,10 @@ from utils.path_anchor import BETSLIPS_RAW_FOLDER
 LOGGER = get_logger(__name__)
 
 
-def fetch_betslips(internal_id, refresh):
+def fetch_betslips(internal_id: str, refresh: bool = True):
     """
     Fetch betslips from Sharp Sports and write raw betslips to json.
+    :return: Raw betslips in Sharp Sports format
     """
     # Create BetSync client
     betsync_client = SharpSportsService()

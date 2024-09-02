@@ -26,6 +26,10 @@ class HedgeBetslip:
     # parlay betslips only
     parlay_details: str
 
+    def __init__(self, data):
+        for k, v in data.items():
+            setattr(self, k, v)
+
     def to_dict(self):
         return {
             "book": self.book,
@@ -40,3 +44,4 @@ class HedgeBetslip:
             "bet_type": self.bet_type,
             "parlay_details": self.parlay_details,
         }
+

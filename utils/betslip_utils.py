@@ -22,6 +22,8 @@ def filter_betslips_by_timestamp(betslips: list[HedgeBetslip], delta):
     start_date = datetime.today() - delta
     filtered_betslips = []
     for betslip in betslips:
+        if not hasattr(betslip, "time_closed"):
+            print("Hello")
         if not betslip.time_closed:  # TODO clean this up
             continue
         date = datetime.strptime(betslip.time_closed, BETSLIP_RESULTS_DATE_FORMAT)

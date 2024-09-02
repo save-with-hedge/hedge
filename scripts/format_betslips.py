@@ -9,10 +9,6 @@ LOGGER = get_logger("FormatBetSlips")
 
 
 def format_betslips(internal_id, fetch=True, refresh=False) -> List[HedgeBetslip]:
-    """
-    Format a user's raw json betslips into Hedge format
-    :return: A list of HedgeBetslip objects
-    """
     raw_betslips = (
         fetch_betslips(internal_id, refresh)
         if fetch
@@ -25,6 +21,22 @@ def format_betslips(internal_id, fetch=True, refresh=False) -> List[HedgeBetslip
         except Exception as e:
             LOGGER.error(
                 f"format_betslips: Error formatting {internal_id} betslip {betslip.get('id')}: {e}"
+            )
+    return formatted_betslips
+
+
+def format_betslips(raw_betslips) -> List[HedgeBetslip]:
+    """
+    Format a user's raw json betslips into Hedge format
+    :return: A list of HedgeBetslip objects
+    """
+    formatted_betslips = []
+    for betslip in raw_betslips:
+        try:
+            formatted_betslips.append(format_betslip(betslip))
+        except Exception as e:
+            LOGGER.error(
+                f"format_betslips: Error formatting betslip {betslip.get('id')}: {e}"
             )
     return formatted_betslips
 
