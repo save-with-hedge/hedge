@@ -1,4 +1,8 @@
 import csv
+from typing import List
+
+from hedge.models.hedge_betslip import HedgeBetslip
+from hedge.utils.path_anchor import PROJECT_ROOT
 
 
 def read_csv(filepath):
@@ -13,7 +17,7 @@ def read_csv(filepath):
     return rows
 
 
-def write_csv(filepath, rows, fieldnames=None):
+def write_csv(filepath: str, rows: List[any], fieldnames: List[str] = None):
     with open(filepath, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if fieldnames:

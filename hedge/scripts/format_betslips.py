@@ -1,28 +1,10 @@
 from datetime import datetime
 from typing import List
 
-from models.hedge_betslip import HedgeBetslip, Result
-from scripts.fetch_betslips import fetch_betslips, fetch_local_betslips
-from utils.log import get_logger
+from hedge.models.hedge_betslip import HedgeBetslip, Result
+from hedge.utils.log import get_logger
 
 LOGGER = get_logger("FormatBetSlips")
-
-
-def format_betslips(internal_id, fetch=True, refresh=False) -> List[HedgeBetslip]:
-    raw_betslips = (
-        fetch_betslips(internal_id, refresh)
-        if fetch
-        else fetch_local_betslips(internal_id)
-    )
-    formatted_betslips = []
-    for betslip in raw_betslips:
-        try:
-            formatted_betslips.append(format_betslip(betslip))
-        except Exception as e:
-            LOGGER.error(
-                f"format_betslips: Error formatting {internal_id} betslip {betslip.get('id')}: {e}"
-            )
-    return formatted_betslips
 
 
 def format_betslips(raw_betslips) -> List[HedgeBetslip]:
@@ -115,19 +97,20 @@ def get_base_hedge_object(raw_betslip):
     if net_profit:
         earnings = float(net_profit) / 100
     result = format_result(_get_attr(raw_betslip, "outcome", None))
-    return HedgeBetslip(
-        book=book_name,
-        time_placed=time_placed,
-        time_closed=time_closed,
-        odds=odds,
-        wager=wager,
-        result=result,
-        earnings=earnings,
-        selection="",
-        sport="",
-        bet_type="",
-        parlay_details="",
-    )
+    betslip_data = {
+        "book": book_name,
+        "time_placed": time_placed,
+        "time_closed": time_closed,
+        "odds": odds,
+        "wager": wager,
+        "result": result,
+        "earnings": earnings,
+        "selection": "",
+        "sport": "",
+        "bet_type": "",
+        "parlay_details": "",
+    }
+    return HedgeBetslip(data=betslip_data)
 
 
 def format_result(raw_outcome):

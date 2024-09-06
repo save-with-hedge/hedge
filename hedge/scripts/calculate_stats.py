@@ -1,5 +1,6 @@
-from utils.betslip_utils import *
-from utils.log import get_logger
+from hedge.models.hedge_betslip import HedgeBetslip
+from hedge.utils.betslip_utils import group_betslips_by_bet_type, calculate_avg_unit_size, calculate_roi
+from hedge.utils.log import get_logger
 
 LOGGER = get_logger("CalculateStats")
 

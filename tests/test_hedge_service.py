@@ -2,9 +2,9 @@ from unittest.mock import patch
 
 import pytest
 
-from models.api.api_models import CreateAccountLinkRequest
-from service.hedge_service import HedgeService
-from service.sharp_sports_service import SharpSportsService
+from hedge.models.api.api_models import CreateAccountLinkRequest
+from hedge.service.hedge_service import HedgeService
+from hedge.service.sharp_sports_service import SharpSportsService
 
 
 class TestHedgeService:

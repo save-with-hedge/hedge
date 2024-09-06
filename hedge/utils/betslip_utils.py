@@ -1,7 +1,7 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
-from models.hedge_betslip import HedgeBetslip
-from utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
+from hedge.models.hedge_betslip import HedgeBetslip
+from hedge.utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
 
 
 def get_past_date_formatted(delta):
@@ -85,3 +85,11 @@ def get_ytd_timedelta():
     jan_1 = datetime(current_date.year, 1, 1)
     delta = current_date - jan_1
     return delta
+
+
+# TODO test me
+def get_wtd_delta() -> timedelta:
+    now = datetime.now()
+    current_weekday = now.weekday()
+    days_since_sunday = (current_weekday + 1) % 7
+    return timedelta(days=days_since_sunday)

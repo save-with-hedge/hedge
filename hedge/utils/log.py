@@ -1,7 +1,6 @@
 import logging
-import os
 
-from utils.path_anchor import PROJECT_ROOT
+from hedge.utils.path_anchor import PROJECT_ROOT
 
 
 def get_logger(name):

@@ -4,10 +4,10 @@ Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
 
-from service.sharp_sports_service import SharpSportsService
-from utils.json_utils import read_json, write_json
-from utils.log import get_logger
-from utils.path_anchor import BETSLIPS_RAW_FOLDER
+from hedge.service.sharp_sports_service import SharpSportsService
+from hedge.utils.json_utils import read_json, write_json
+from hedge.utils.log import get_logger
+from hedge.utils.path_anchor import BETSLIPS_RAW_FOLDER
 
 LOGGER = get_logger(__name__)
 
@@ -24,13 +24,9 @@ def fetch_betslips(internal_id: str, refresh: bool = True):
     if refresh:
         betsync_client.refresh_bettor(internal_id)
 
-    # Pull betslips and write to file
     betslips = betsync_client.get_betslips_by_bettor(internal_id)
     if betslips is None or len(betslips) == 0:
         return []
-
-    filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
-    write_json(filepath, betslips)
     return betslips
 
 

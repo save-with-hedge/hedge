@@ -29,19 +29,3 @@ class HedgeBetslip:
     def __init__(self, data):
         for k, v in data.items():
             setattr(self, k, v)
-
-    def to_dict(self):
-        return {
-            "book": self.book,
-            "time_placed": self.time_placed,
-            "time_closed": self.time_closed,
-            "odds": self.odds,
-            "wager": self.wager,
-            "result": self.result.value,
-            "earnings": self.earnings,
-            "selection": self.selection,
-            "sport": self.sport,
-            "bet_type": self.bet_type,
-            "parlay_details": self.parlay_details,
-        }
-

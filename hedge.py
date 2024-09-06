@@ -1,3 +1,6 @@
+"""
+This is the API handler entry point
+"""
 import os
 from contextlib import asynccontextmanager
 from http import HTTPStatus
@@ -9,10 +12,10 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
-from service.hedge_service import HedgeService
-from models.api.api_models import CreateAccountLinkRequest, GetStatsForBettorRequest
-from repository.mongo_repository import MongoRepository
-from utils.log import get_logger
+from hedge.service.hedge_service import HedgeService
+from hedge.models.api.api_models import CreateAccountLinkRequest, GetStatsForBettorRequest
+from hedge.repository.mongo_repository import MongoRepository
+from hedge.utils.log import get_logger
 
 
 security = HTTPBasic()
@@ -138,18 +141,11 @@ def get_betslips_for_bettor(internal_id: str, is_authenticated=Depends(authentic
 
 
 @app.get("/v1/bettors/{internal_id}/stats")
-def get_stats_for_bettor(
-        internal_id: str,
-        request: GetStatsForBettorRequest = None,
-        is_authenticated=Depends(authenticate),
-):
+def get_stats_for_bettor(internal_id: str, is_authenticated=Depends(authenticate)):
     LOGGER.info(f"Request to get_stats_for_bettor {internal_id}")
     if is_authenticated:
-        if request and request.refresh:
-            LOGGER.info(f"Refresh stats requested")
-            hedge_service.refresh_stats_for_bettor(internal_id)
         stats = hedge_service.get_stats_for_bettor(internal_id)
-        if stats is None or len(stats) == 0:
+        if stats is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"No stats found for {internal_id}",
