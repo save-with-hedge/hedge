@@ -7,3 +7,5 @@ __pycache__/
 out/
 
 logs/
+
+service_account.json
