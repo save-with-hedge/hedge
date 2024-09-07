@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import Any, Dict
 
 
 class Result(Enum):
@@ -29,3 +30,8 @@ class HedgeBetslip:
     def __init__(self, data):
         for k, v in data.items():
             setattr(self, k, v)
+
+    def to_dict(self) -> Dict[str, Any]:
+        dict_modified = self.__dict__
+        dict_modified["result"] = self.result.value
+        return dict_modified

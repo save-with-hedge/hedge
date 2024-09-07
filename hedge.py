@@ -13,18 +13,17 @@ from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
 from hedge.service.hedge_service import HedgeService
-from hedge.models.api.api_models import CreateAccountLinkRequest, GetStatsForBettorRequest
+from hedge.models.api.api_models import CreateAccountLinkRequest
 from hedge.repository.mongo_repository import MongoRepository
 from hedge.utils.log import get_logger
 
+
+LOGGER = get_logger("HedgeController")
 
 security = HTTPBasic()
 app = FastAPI()
 hedge_service = HedgeService()
 mongo_repository = MongoRepository()
-
-
-LOGGER = get_logger("HedgeController")
 
 
 # Daily refresh job

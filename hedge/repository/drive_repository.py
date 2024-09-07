@@ -1,18 +1,26 @@
 """
 Wrapper around Google Drive client
 """
-from googleapiclient.discovery import build
+import os
+
+from dotenv import load_dotenv
+from googleapiclient.discovery import build, Resource
 from google.oauth2 import service_account
 from typing import List, Any
 
 from hedge.models.hedge_betslip import HedgeBetslip
 from hedge.utils.csv_utils import write_csv
+from hedge.utils.log import get_logger
 from hedge.utils.path_anchor import BETSLIPS_FORMATTED_FOLDER, PROJECT_ROOT
+
+
+LOGGER = get_logger("DriveRepository")
+
+load_dotenv()
 
 SCOPES = ["https://www.googleapis.com/auth/drive"]
 SERVICE_ACCT_FILE = str(PROJECT_ROOT / "service_account.json")
-FILE_PATH = str(BETSLIPS_FORMATTED_FOLDER / "andrew_schleeter.csv")
-PARENT_FOLDER_ID = "1wNlPwpZi5TdDJqls9N-7IYH-GEyttyz0"  # TODO make this an env variable
+PARENT_FOLDER_ID = os.getenv("GOOGLE_DRIVE_DATA_FOLDER_ID")
 
 
 class DriveRepository:
@@ -25,16 +33,28 @@ class DriveRepository:
         creds = service_account.Credentials.from_service_account_file(SERVICE_ACCT_FILE, scopes=SCOPES)
         return creds
 
-    def ping(self):
+    def delete_file(self, service: Resource, filename: str) -> None:
+        query = f"name = '{filename}'"
+        results = service.files().list(q=query, spaces="drive", fields="files(id, name)").execute()
+        items = results.get("files", [])
+        for item in items:
+            service.files().delete(fileId=item["id"]).execute()
+
+    def upload(self, filepath: str) -> None:
         with build("drive", "v3", credentials=self.creds) as service:
+            filename = filepath.split("/")[-1]
             file_metadata = {
-                "name": "andrew_schleeter.csv",
+                "name": filename,
                 "parents": [PARENT_FOLDER_ID]
             }
-            service.files().create(
-                body=file_metadata,
-                media_body=FILE_PATH,
-            ).execute()
+            try:
+                self.delete_file(service=service, filename=filename)  # Replace the old file if it exists
+                service.files().create(
+                    body=file_metadata,
+                    media_body=filepath,
+                ).execute()
+            except Exception as e:
+                LOGGER.error(f"Failed to upload betslips file {filename}: {e}")
 
     def upload_betslips(self, filename: str, betslips: List[HedgeBetslip]) -> None:
         """
@@ -44,8 +64,12 @@ class DriveRepository:
         fieldnames = list(betslip_dicts[0].keys())
         path = str(BETSLIPS_FORMATTED_FOLDER / filename)
         write_csv(filepath=path, rows=betslip_dicts, fieldnames=fieldnames)
+        self.upload(filepath=path)
 
 
 if __name__ == '__main__':
+    """
+    For testing purposes only
+    """
     drive_repo = DriveRepository()
-    drive_repo.ping()
+    drive_repo.upload(filepath=str(BETSLIPS_FORMATTED_FOLDER / "ncolosso.csv"))

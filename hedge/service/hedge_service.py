@@ -1,4 +1,5 @@
 import datetime
+import json
 from typing import Dict
 
 from hedge.models.api.api_models import CreateAccountLinkRequest
@@ -15,8 +16,8 @@ from hedge.utils.constants import (
     MONGO_BETSLIPS_COLLECTION, MONGO_STATS_COLLECTION,
 )
 from hedge.utils.user_utils import get_internal_id
-from hedge.utils.path_anchor import BOOK_INFO_FOLDER
-from hedge.utils.json_utils import read_json
+from hedge.utils.path_anchor import BOOK_INFO_FOLDER, STATS_FOLDER
+from hedge.utils.json_utils import read_json, write_json
 from hedge.utils.log import get_logger
 
 LOGGER = get_logger("HedgeService")
@@ -116,7 +117,7 @@ class HedgeService:
             betslips_mongo_doc = {
                 "internal_id": internal_id,
                 "refresh_time": time_now,
-                "betslips_ytd": [betslip.__dict__ for betslip in hedge_betslips],
+                "betslips_ytd": [betslip.to_dict() for betslip in hedge_betslips],
             }
             self.mongo_repository.upsert_document(
                 MONGO_BETSLIPS_COLLECTION, internal_id, betslips_mongo_doc
@@ -130,6 +131,7 @@ class HedgeService:
         """
         time_now = datetime.datetime.now().strftime("%H:%M:%S %m/%d/%Y")
         bettors = self.sharp_sports_service.get_bettors()
+        stats_all = {}
         internal_ids = [bettor.get("internalId") for bettor in bettors]
         for internal_id in internal_ids:
             betslips_doc = self.get_betslips_for_bettor(internal_id=internal_id)
@@ -155,8 +157,14 @@ class HedgeService:
                 "stats_7_days": stats_7_days,
             }
             self.mongo_repository.upsert_document(MONGO_STATS_COLLECTION, internal_id, stats_mongo_doc)
-
-            # Write to csv
+            stats_all[internal_id] = {
+                "ytd": stats_ytd,
+                "wtd": stats_wtd,
+                "7_days": stats_7_days,
+            }
+        filepath = str(STATS_FOLDER / "all_stats.json")
+        write_json(filepath=filepath, json_data=stats_all)
+        self.drive_repository.upload(filepath=filepath)
 
     def get_betslips_for_bettor(self, internal_id: str) -> Dict[str, any] | None:
         """
@@ -183,4 +191,4 @@ class HedgeService:
 if __name__ == "__main__":
     # For testing only
     service = HedgeService()
-    service.refresh_all_betslips()
+    service.refresh_all_stats()
