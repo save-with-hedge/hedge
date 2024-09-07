@@ -8,10 +8,10 @@ from googleapiclient.discovery import build, Resource
 from google.oauth2 import service_account
 from typing import List, Any
 
-from hedge.models.hedge_betslip import HedgeBetslip
-from hedge.utils.csv_utils import write_csv
-from hedge.utils.log import get_logger
-from hedge.utils.path_anchor import BETSLIPS_FORMATTED_FOLDER, PROJECT_ROOT
+from models.hedge_betslip import HedgeBetslip
+from utils.csv_utils import write_csv
+from utils.log import get_logger
+from utils.path_anchor import BETSLIPS_FORMATTED_FOLDER, PROJECT_ROOT
 
 
 LOGGER = get_logger("DriveRepository")

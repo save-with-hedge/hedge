@@ -5,9 +5,9 @@ from datetime import timedelta
 import pytest
 from freezegun import freeze_time
 
-from hedge.utils.betslip_utils import get_past_date_formatted, filter_betslips_by_timestamp, calculate_avg_unit_size, \
+from utils.betslip_utils import get_past_date_formatted, filter_betslips_by_timestamp, calculate_avg_unit_size, \
     calculate_roi, get_decimal_from_odds
-from hedge.utils.path_anchor import PROJECT_ROOT
+from utils.path_anchor import PROJECT_ROOT
 
 
 @pytest.fixture

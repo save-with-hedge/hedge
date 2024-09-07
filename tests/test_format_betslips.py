@@ -1,5 +1,5 @@
-from hedge.models.hedge_betslip import HedgeBetslip, Result
-from hedge.scripts.format_betslips import format_betslip
+from models.hedge_betslip import HedgeBetslip, Result
+from scripts.format_betslips import format_betslip
 
 mock_raw_betslip_single = {
     "book": {

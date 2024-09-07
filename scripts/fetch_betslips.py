@@ -4,10 +4,10 @@ Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
 
-from hedge.service.sharp_sports_service import SharpSportsService
-from hedge.utils.json_utils import read_json, write_json
-from hedge.utils.log import get_logger
-from hedge.utils.path_anchor import BETSLIPS_RAW_FOLDER
+from service.sharp_sports_service import SharpSportsService
+from utils.json_utils import read_json
+from utils.log import get_logger
+from utils.path_anchor import BETSLIPS_RAW_FOLDER
 
 LOGGER = get_logger(__name__)
 

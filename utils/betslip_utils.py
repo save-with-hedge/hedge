@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
-from hedge.models.hedge_betslip import HedgeBetslip
-from hedge.utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
+from models.hedge_betslip import HedgeBetslip
+from utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
 
 
 def get_past_date_formatted(delta):

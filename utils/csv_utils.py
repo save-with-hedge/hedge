@@ -1,9 +1,6 @@
 import csv
 from typing import List
 
-from hedge.models.hedge_betslip import HedgeBetslip
-from hedge.utils.path_anchor import PROJECT_ROOT
-
 
 def read_csv(filepath):
     """

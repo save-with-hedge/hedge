@@ -12,10 +12,10 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
-from hedge.service.hedge_service import HedgeService
-from hedge.models.api.api_models import CreateAccountLinkRequest
-from hedge.repository.mongo_repository import MongoRepository
-from hedge.utils.log import get_logger
+from service.hedge_service import HedgeService
+from models.api.api_models import CreateAccountLinkRequest
+from repository.mongo_repository import MongoRepository
+from utils.log import get_logger
 
 
 LOGGER = get_logger("HedgeController")
@@ -66,8 +66,8 @@ async def lifespan(app: FastAPI):
 
 allowed_origins = [
     "http://localhost:3000",
-    "https://savewithhedge.vercel.app",
-    "https://www.savewithhedge.co",
+    "https://savewithvercel.app",
+    "https://www.savewithco",
 ]
 
 app.add_middleware(

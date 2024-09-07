@@ -4,7 +4,7 @@ import os
 
 from dotenv import load_dotenv
 
-from hedge.utils.log import get_logger
+from utils.log import get_logger
 
 LOGGER = get_logger("SharpSportsService")
 

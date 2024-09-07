@@ -10,11 +10,11 @@ from dotenv import load_dotenv
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 
-from hedge.utils.constants import (
+from utils.constants import (
     MONGO_USERS_COLLECTION,
     MONGO_ADMINS_COLLECTION, MONGO_STATS_COLLECTION,
 )
-from hedge.utils.log import get_logger
+from utils.log import get_logger
 
 LOGGER = get_logger("MongoRepository")
 
