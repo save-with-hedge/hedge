@@ -1,6 +1,7 @@
 """
 This is the API handler entry point
 """
+
 import os
 from contextlib import asynccontextmanager
 from http import HTTPStatus
@@ -30,10 +31,9 @@ mongo_repository = MongoRepository()
 def refresh_betslips_daily():
     """
     Daily job for refreshing all bettor betslips and stats.
-    Uses a lock-like approach to ensure only one worker completes the task.
     """
     lock_file = "lock.txt"
-    # Check if lock file exists (simulating lock is in use)
+    # Check if lock file exists (if it does, another worker is already performing the task)
     if os.path.exists(lock_file):
         return
     else:
@@ -46,13 +46,15 @@ def refresh_betslips_daily():
         LOGGER.info("Done!")
     except Exception as e:
         LOGGER.error(e)
-    # "Release" the lock
+    # Remove lock file to mark job as complete
     os.remove(lock_file)
 
 
 # Set up the scheduler
 scheduler = BackgroundScheduler()
-trigger = CronTrigger(hour=5, minute=0, timezone=pytz.timezone("America/New_York"))  # Run every day at 5am ET
+trigger = CronTrigger(
+    hour=5, minute=0, timezone=pytz.timezone("America/New_York")
+)  # Run every day at 5am ET
 scheduler.add_job(func=refresh_betslips_daily, trigger=trigger)
 scheduler.start()
 
@@ -155,7 +157,7 @@ def get_stats_for_bettor(internal_id: str, is_authenticated=Depends(authenticate
 
 @app.post("/v1/bettors/link")
 def create_account_link(
-        is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
+    is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
 ):
     LOGGER.info(f"Request to create_account_link ${request}")
     if is_authenticated:

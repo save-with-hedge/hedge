@@ -1,6 +1,7 @@
 """
 Wrapper around MongoDB
 """
+
 import certifi
 import json
 import requests
@@ -12,7 +13,8 @@ from pymongo.server_api import ServerApi
 
 from utils.constants import (
     MONGO_USERS_COLLECTION,
-    MONGO_ADMINS_COLLECTION, MONGO_STATS_COLLECTION,
+    MONGO_ADMINS_COLLECTION,
+    MONGO_STATS_COLLECTION,
 )
 from utils.log import get_logger
 

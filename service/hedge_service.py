@@ -1,5 +1,5 @@
 import datetime
-from typing import Dict
+from typing import Dict, Tuple, List, Any
 
 from models.api.api_models import CreateAccountLinkRequest
 from models.hedge_betslip import HedgeBetslip
@@ -12,7 +12,8 @@ from service.sharp_sports_service import SharpSportsService
 from utils.betslip_utils import filter_betslips_by_timestamp, get_wtd_delta
 from utils.constants import (
     BOOK_REGIONS_HEDGE_FILENAME,
-    MONGO_BETSLIPS_COLLECTION, MONGO_STATS_COLLECTION,
+    MONGO_BETSLIPS_COLLECTION,
+    MONGO_STATS_COLLECTION,
 )
 from utils.user_utils import get_internal_id
 from utils.path_anchor import BOOK_INFO_FOLDER, STATS_FOLDER
@@ -28,7 +29,9 @@ class HedgeService:
         self.mongo_repository = MongoRepository()
         self.drive_repository = DriveRepository()
 
-    def create_account_link(self, request: CreateAccountLinkRequest):
+    def create_account_link(
+        self, request: CreateAccountLinkRequest
+    ) -> Tuple[str | None, str | None, str]:
         """
         :return: A tuple containing a user-specific contextId, account linking url, and an exception message
         """
@@ -41,7 +44,7 @@ class HedgeService:
 
         # Get bookRegionId and SDK required
         book_regions_path = (
-                BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
+            BOOK_INFO_FOLDER + "/" + BOOK_REGIONS_HEDGE_FILENAME + ".json"
         )
         book_regions = read_json(book_regions_path)
         book_region_id = (
@@ -61,7 +64,11 @@ class HedgeService:
         url = self.format_link_url(cid, book_region_id, sdk_required)
         return cid, url, ""
 
-    def create_bettor(self, first, last, phone):
+    def create_bettor(self, first: str, last: str, phone: str) -> str:
+        """
+        Create bettor in the DB
+        :return: the internal_id that was created
+        """
         internal_id = get_internal_id(first, last)
         user = self.mongo_repository.get_bettor(internal_id)
         if user is None:
@@ -69,17 +76,17 @@ class HedgeService:
         return internal_id
 
     @staticmethod
-    def format_link_url(cid, book_region_id, sdk_required):
+    def format_link_url(cid: str, book_region_id: str, sdk_required: bool) -> str:
         url = "https://ui.sharpsports.io/link/" + cid
         if sdk_required:
             url += "/region/" + book_region_id + "/login"
         return url
 
-    def get_bettors(self):
+    def get_bettors(self) -> List[Dict[Any, Any]]:
         return self.sharp_sports_service.get_bettors()
 
     @staticmethod
-    def get_books():
+    def get_books() -> List[str] | Exception:
         try:
             path = BOOK_INFO_FOLDER + "/book_regions_hedge.json"
             books = read_json(path)
@@ -90,7 +97,7 @@ class HedgeService:
             return e
 
     @staticmethod
-    def get_regions_for_book(book_name):
+    def get_regions_for_book(book_name: str) -> List[str] | Exception:
         try:
             path = BOOK_INFO_FOLDER + "/book_regions_hedge.json"
             books = read_json(path)
@@ -122,7 +129,9 @@ class HedgeService:
                 MONGO_BETSLIPS_COLLECTION, internal_id, betslips_mongo_doc
             )
             if len(hedge_betslips) > 0:
-                self.drive_repository.upload_betslips(filename=f"{internal_id}.csv", betslips=hedge_betslips)
+                self.drive_repository.upload_betslips(
+                    filename=f"{internal_id}.csv", betslips=hedge_betslips
+                )
 
     def refresh_all_stats(self) -> None:
         """
@@ -142,9 +151,12 @@ class HedgeService:
                 LOGGER.info(f"No betslips_ytd found for {internal_id}")
                 continue
             hedge_betslips_ytd = [HedgeBetslip(data) for data in betslips_ytd]
-            hedge_betslips_wtd = filter_betslips_by_timestamp(betslips=hedge_betslips_ytd, delta=get_wtd_delta())
-            hedge_betslips_7_days = filter_betslips_by_timestamp(betslips=hedge_betslips_ytd,
-                                                                 delta=datetime.timedelta(days=7))
+            hedge_betslips_wtd = filter_betslips_by_timestamp(
+                betslips=hedge_betslips_ytd, delta=get_wtd_delta()
+            )
+            hedge_betslips_7_days = filter_betslips_by_timestamp(
+                betslips=hedge_betslips_ytd, delta=datetime.timedelta(days=7)
+            )
             stats_ytd = calculate_stats(hedge_betslips_ytd)
             stats_wtd = calculate_stats(hedge_betslips_wtd)
             stats_7_days = calculate_stats(hedge_betslips_7_days)
@@ -155,7 +167,9 @@ class HedgeService:
                 "stats_wtd": stats_wtd,
                 "stats_7_days": stats_7_days,
             }
-            self.mongo_repository.upsert_document(MONGO_STATS_COLLECTION, internal_id, stats_mongo_doc)
+            self.mongo_repository.upsert_document(
+                MONGO_STATS_COLLECTION, internal_id, stats_mongo_doc
+            )
             stats_all[internal_id] = {
                 "ytd": stats_ytd,
                 "wtd": stats_wtd,
@@ -169,25 +183,20 @@ class HedgeService:
         """
         :return: A list of betslips info for a user, or None if the document does not exist
         """
-        return self.mongo_repository.find_document(MONGO_BETSLIPS_COLLECTION, {"internal_id": internal_id})
+        return self.mongo_repository.find_document(
+            MONGO_BETSLIPS_COLLECTION, {"internal_id": internal_id}
+        )
 
     def get_stats_for_bettor(self, internal_id):
         """
         :return: A dictionary of stats info for a user, or None if the document does not exist
         """
-        return self.mongo_repository.find_document(MONGO_STATS_COLLECTION, {"internal_id": internal_id})
-
-    def get_stats_all(self):
-        all_stats = []
-        bettors = self.get_bettors()
-        for bettor in bettors:
-            stats = self.get_stats_for_bettor(bettor.get("internalId"))
-            if stats:
-                all_stats.append(stats)
-        return all_stats
+        return self.mongo_repository.find_document(
+            MONGO_STATS_COLLECTION, {"internal_id": internal_id}
+        )
 
 
 if __name__ == "__main__":
     # For testing only
     service = HedgeService()
-    service.refresh_all_stats()
+    service.refresh_all_betslips()

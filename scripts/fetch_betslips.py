@@ -14,7 +14,7 @@ LOGGER = get_logger(__name__)
 
 def fetch_betslips(internal_id: str, refresh: bool = True):
     """
-    Fetch betslips from Sharp Sports and write raw betslips to json.
+    Fetch betslips from Sharp Sports
     :return: Raw betslips in Sharp Sports format
     """
     # Create BetSync client
