@@ -1,4 +1,9 @@
-from utils.betslip_utils import *
+from models.hedge_betslip import HedgeBetslip
+from utils.betslip_utils import (
+    group_betslips_by_bet_type,
+    calculate_avg_unit_size,
+    calculate_roi,
+)
 from utils.log import get_logger
 
 LOGGER = get_logger("CalculateStats")
@@ -9,6 +14,9 @@ def calculate_stats(betslips: list[HedgeBetslip]):
     For the given user and timedelta, calculate average unit size and ROI by bet type and write the results to
     json and csv
     """
+    if len(betslips) == 0:
+        return []
+
     # Group by bet type
     betslips_grouped = group_betslips_by_bet_type(betslips)
 

@@ -1,35 +1,29 @@
 from datetime import datetime
-from typing import List
+from typing import List, Dict, Any
 
 from models.hedge_betslip import HedgeBetslip, Result
-from scripts.fetch_betslips import fetch_betslips, fetch_local_betslips
 from utils.log import get_logger
 
 LOGGER = get_logger("FormatBetSlips")
 
 
-def format_betslips(internal_id, fetch=True, refresh=False) -> List[HedgeBetslip]:
+def format_betslips(raw_betslips) -> List[HedgeBetslip]:
     """
-    Format a user's raw json betslips into Hedge format
+    Format a user's raw Sharp Sports betslips into Hedge format
     :return: A list of HedgeBetslip objects
     """
-    raw_betslips = (
-        fetch_betslips(internal_id, refresh)
-        if fetch
-        else fetch_local_betslips(internal_id)
-    )
     formatted_betslips = []
     for betslip in raw_betslips:
         try:
             formatted_betslips.append(format_betslip(betslip))
         except Exception as e:
             LOGGER.error(
-                f"format_betslips: Error formatting {internal_id} betslip {betslip.get('id')}: {e}"
+                f"format_betslips: Error formatting betslip {betslip.get('id')}: {e}"
             )
     return formatted_betslips
 
 
-def format_betslip(raw_betslip):
+def format_betslip(raw_betslip: Dict[Any, Any]) -> HedgeBetslip:
     """
     :param raw_betslip: a raw, Sharp Sports betslip
     :return: a HedgeBetslip object
@@ -47,7 +41,7 @@ def format_betslip(raw_betslip):
         )
 
 
-def get_single_type_hedge_object(raw_betslip):
+def get_single_type_hedge_object(raw_betslip: Dict[Any, Any]) -> HedgeBetslip:
     hedge_object = get_base_hedge_object(raw_betslip)
     single_bet = _get_attr(raw_betslip, "bets", None)
     if single_bet is None:
@@ -62,7 +56,7 @@ def get_single_type_hedge_object(raw_betslip):
     return hedge_object
 
 
-def get_parlay_type_hedge_object(raw_betslip):
+def get_parlay_type_hedge_object(raw_betslip: Dict[Any, Any]) -> HedgeBetslip:
     hedge_object = get_base_hedge_object(raw_betslip)
     hedge_object.bet_type = "parlay"
     bets_list = _get_attr(raw_betslip, "bets", None)
@@ -71,7 +65,7 @@ def get_parlay_type_hedge_object(raw_betslip):
     return hedge_object
 
 
-def format_parlay_details(bets_list):
+def format_parlay_details(bets_list: List[Any]) -> List[Dict[Any, Any]]:
     """
     :param bets_list: raw bets list from betslip.get("bets")
     :return: a list of bet objects containing bet description
@@ -83,7 +77,7 @@ def format_parlay_details(bets_list):
     return parlay_details
 
 
-def get_base_hedge_object(raw_betslip):
+def get_base_hedge_object(raw_betslip: Dict[Any, Any]) -> HedgeBetslip:
     book_name = _get_attr(_get_attr(raw_betslip, "book", ""), "name", "")
     time_placed = _get_attr(raw_betslip, "timePlaced", "")
     time_closed = _get_attr(raw_betslip, "timeClosed", "")
@@ -103,22 +97,23 @@ def get_base_hedge_object(raw_betslip):
     if net_profit:
         earnings = float(net_profit) / 100
     result = format_result(_get_attr(raw_betslip, "outcome", None))
-    return HedgeBetslip(
-        book=book_name,
-        time_placed=time_placed,
-        time_closed=time_closed,
-        odds=odds,
-        wager=wager,
-        result=result,
-        earnings=earnings,
-        selection="",
-        sport="",
-        bet_type="",
-        parlay_details="",
-    )
+    betslip_data = {
+        "book": book_name,
+        "time_placed": time_placed,
+        "time_closed": time_closed,
+        "odds": odds,
+        "wager": wager,
+        "result": result,
+        "earnings": earnings,
+        "selection": "",
+        "sport": "",
+        "bet_type": "",
+        "parlay_details": "",
+    }
+    return HedgeBetslip(data=betslip_data)
 
 
-def format_result(raw_outcome):
+def format_result(raw_outcome: str) -> Result:
     if raw_outcome is None:
         raise Exception("Betslip has no outcome field")
     elif raw_outcome == "win":
@@ -133,14 +128,14 @@ def format_result(raw_outcome):
         )
 
 
-def _get_attr(dict_obj, attr, default=None):
+def _get_attr(dict_obj: Dict[str, Any], attr: str, default=None) -> Any:
     if dict_obj.get(attr) is None:
         return default
     else:
         return dict_obj.get(attr)
 
 
-def _format_odds_str(odds):
+def _format_odds_str(odds: str | int) -> str:
     if odds == "":
         return ""
     elif odds >= 0:

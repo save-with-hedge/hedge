@@ -25,7 +25,7 @@ class SharpSportsService:
         if additional_headers:
             for key, value in additional_headers.items():
                 headers[key] = value
-        LOGGER.info(f"Sending headers {headers}")
+        LOGGER.debug(f"Sending headers {headers}")
         return headers
 
     def get_book_regions(self):
@@ -34,7 +34,7 @@ class SharpSportsService:
         params = {"status": "active"}
         response = requests.get(url, headers=headers, params=params)
         if response.status_code != 200:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
@@ -43,7 +43,7 @@ class SharpSportsService:
         headers = self.get_headers(self.public_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200:
-            print(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
@@ -56,9 +56,9 @@ class SharpSportsService:
         headers = self.get_headers(
             self.private_api_key, {"content-type": "application/json"}
         )
-        LOGGER.info(f"Request: {url}")
+        LOGGER.debug(f"Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        LOGGER.info(f"Response: {response.text}")
+        LOGGER.debug(f"Response: {response.text}")
         if response.status_code != 200:
             LOGGER.info(f"{response.status_code} - {response.text}")
             raise
@@ -76,47 +76,47 @@ class SharpSportsService:
         headers = self.get_headers(
             self.public_api_key, {"content-type": "application/json"}
         )
-        LOGGER.info(f"Request: {url}")
+        LOGGER.debug(f"Request: {url}")
         response = requests.post(url, json=payload, headers=headers)
-        LOGGER.info(f"Response: {response.text}")
+        LOGGER.debug(f"Response: {response.text}")
         if response.status_code != 200 and response.status_code != 201:
-            LOGGER.info(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text).get("cid")
 
     def get_bettors(self):
-        LOGGER.info("Get bettors")
+        LOGGER.debug("Get bettors")
         url = self.base_url + "/bettors"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            LOGGER.info(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
     def get_bettor_accounts(self, internal_id):
-        LOGGER.info("Get bettor accounts")
+        LOGGER.debug("Get bettor accounts")
         url = self.base_url + "/bettors/" + internal_id + "/bettorAccounts"
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            LOGGER.info(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 
     def refresh_bettor(self, internal_id):
-        LOGGER.info(f"Refresh bettor {internal_id}")
+        LOGGER.debug(f"Refresh bettor {internal_id}")
         url = self.base_url + "/bettors/" + internal_id + "/refresh"
         headers = self.get_headers(self.public_api_key)
         response = requests.post(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            LOGGER.info(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
 
     def get_betslips_by_bettor(
         self, internal_id, status="completed", start_date=None, end_date=None
     ):
-        LOGGER.info(f"Get betslips for {internal_id}")
+        LOGGER.debug(f"Get betslips for {internal_id}")
         url = self.base_url + "/bettors/" + internal_id + "/betSlips"
         url += f"?status={status}"
         if start_date:
@@ -128,7 +128,7 @@ class SharpSportsService:
         headers = self.get_headers(self.private_api_key)
         response = requests.get(url, headers=headers)
         if response.status_code != 200 and response.status_code != 201:
-            LOGGER.info(f"{response.status_code} - {response.text}")
+            LOGGER.error(f"{response.status_code} - {response.text}")
             return
         return json.loads(response.text)
 

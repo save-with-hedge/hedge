@@ -5,16 +5,17 @@ Usage:
 """
 
 from service.sharp_sports_service import SharpSportsService
-from utils.json_utils import read_json, write_json
+from utils.json_utils import read_json
 from utils.log import get_logger
 from utils.path_anchor import BETSLIPS_RAW_FOLDER
 
 LOGGER = get_logger(__name__)
 
 
-def fetch_betslips(internal_id, refresh):
+def fetch_betslips(internal_id: str, refresh: bool = True):
     """
-    Fetch betslips from Sharp Sports and write raw betslips to json.
+    Fetch betslips from Sharp Sports
+    :return: Raw betslips in Sharp Sports format
     """
     # Create BetSync client
     betsync_client = SharpSportsService()
@@ -23,13 +24,9 @@ def fetch_betslips(internal_id, refresh):
     if refresh:
         betsync_client.refresh_bettor(internal_id)
 
-    # Pull betslips and write to file
     betslips = betsync_client.get_betslips_by_bettor(internal_id)
     if betslips is None or len(betslips) == 0:
         return []
-
-    filepath = BETSLIPS_RAW_FOLDER + "/" + internal_id + ".json"
-    write_json(filepath, betslips)
     return betslips
 
 

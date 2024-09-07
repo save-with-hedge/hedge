@@ -1,4 +1,5 @@
 import csv
+from typing import List
 
 
 def read_csv(filepath):
@@ -13,7 +14,7 @@ def read_csv(filepath):
     return rows
 
 
-def write_csv(filepath, rows, fieldnames=None):
+def write_csv(filepath: str, rows: List[any], fieldnames: List[str] = None):
     with open(filepath, "w", newline="") as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         if fieldnames:

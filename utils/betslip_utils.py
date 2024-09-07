@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from models.hedge_betslip import HedgeBetslip
 from utils.constants import BETSLIP_RESULTS_DATE_FORMAT, SHARP_API_REQUEST_DATE_FORMAT
@@ -22,6 +22,8 @@ def filter_betslips_by_timestamp(betslips: list[HedgeBetslip], delta):
     start_date = datetime.today() - delta
     filtered_betslips = []
     for betslip in betslips:
+        if not hasattr(betslip, "time_closed"):
+            print("Hello")
         if not betslip.time_closed:  # TODO clean this up
             continue
         date = datetime.strptime(betslip.time_closed, BETSLIP_RESULTS_DATE_FORMAT)
@@ -83,3 +85,11 @@ def get_ytd_timedelta():
     jan_1 = datetime(current_date.year, 1, 1)
     delta = current_date - jan_1
     return delta
+
+
+# TODO test me
+def get_wtd_delta() -> timedelta:
+    now = datetime.now()
+    current_weekday = now.weekday()
+    days_since_sunday = (current_weekday + 1) % 7
+    return timedelta(days=days_since_sunday)

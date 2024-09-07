@@ -4,7 +4,6 @@ from utils.path_anchor import PROJECT_ROOT
 
 
 def get_logger(name):
-    # return logging.getLogger("gunicorn.error")
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
     logger.propagate = False
@@ -20,8 +19,3 @@ def get_logger(name):
         )
         logger.addHandler(handler)
     return logger
-
-
-if __name__ == "__main__":
-    logger = get_logger()
-    logger.info("This is a test")

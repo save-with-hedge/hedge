@@ -1,11 +1,23 @@
+"""
+This is the API handler entry point
+"""
+
+import os
+from contextlib import asynccontextmanager
+from http import HTTPStatus
+
+import pytz
+from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.triggers.cron import CronTrigger
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
 from service.hedge_service import HedgeService
-from models.api.api_models import CreateAccountLinkRequest, GetStatsForBettorRequest
+from models.api.api_models import CreateAccountLinkRequest
 from repository.mongo_repository import MongoRepository
 from utils.log import get_logger
+
 
 LOGGER = get_logger("HedgeController")
 
@@ -14,10 +26,50 @@ app = FastAPI()
 hedge_service = HedgeService()
 mongo_repository = MongoRepository()
 
+
+# Daily refresh job
+def refresh_betslips_daily():
+    """
+    Daily job for refreshing all bettor betslips and stats.
+    """
+    lock_file = "lock.txt"
+    # Check if lock file exists (if it does, another worker is already performing the task)
+    if os.path.exists(lock_file):
+        return
+    else:
+        with open(lock_file, "w") as f:
+            pass
+    try:
+        LOGGER.info("Starting daily betslip refresh job...")
+        hedge_service.refresh_all_betslips()
+        hedge_service.refresh_all_stats()
+        LOGGER.info("Done!")
+    except Exception as e:
+        LOGGER.error(e)
+    # Remove lock file to mark job as complete
+    os.remove(lock_file)
+
+
+# Set up the scheduler
+scheduler = BackgroundScheduler()
+trigger = CronTrigger(
+    hour=5, minute=0, timezone=pytz.timezone("America/New_York")
+)  # Run every day at 5am ET
+scheduler.add_job(func=refresh_betslips_daily, trigger=trigger)
+scheduler.start()
+
+
+# Ensure the scheduler shuts down properly on application exit
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    yield
+    scheduler.shutdown()
+
+
 allowed_origins = [
     "http://localhost:3000",
-    "https://savewithhedge.vercel.app",
-    "https://www.savewithhedge.co",
+    "https://savewithvercel.app",
+    "https://www.savewithco",
 ]
 
 app.add_middleware(
@@ -60,70 +112,47 @@ def get_bettors(is_authenticated=Depends(authenticate)):
     LOGGER.info("Request to get_bettors")
     if is_authenticated:
         bettors = hedge_service.get_bettors()
-        return {"message": bettors}
+        return {"bettors": bettors}
+
+
+@app.post("/v1/bettors/betslips/refresh")
+def refresh_all_betslips(is_authenticated=Depends(authenticate)):
+    """
+    Ad hoc betslip refresh endpoint, betslips normally refresh every 24 hours
+    """
+    LOGGER.info("Request to refresh_all_betslips")
+    if is_authenticated:
+        hedge_service.refresh_all_betslips()
+        hedge_service.refresh_all_stats()
+        return {"status": HTTPStatus.OK}
+
+
+@app.get("/v1/bettors/{internal_id}/betslips")
+def get_betslips_for_bettor(internal_id: str, is_authenticated=Depends(authenticate)):
+    LOGGER.info(f"Request to get_betslips_for_bettor {internal_id}")
+    if is_authenticated:
+        betslips = hedge_service.get_betslips_for_bettor(internal_id)
+        if betslips is None:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"No betslips found for {internal_id}",
+            )
+        else:
+            return {"betslips": betslips}
 
 
 @app.get("/v1/bettors/{internal_id}/stats")
-def get_stats_for_bettor(
-    internal_id: str,
-    request: GetStatsForBettorRequest = None,
-    is_authenticated=Depends(authenticate),
-):
+def get_stats_for_bettor(internal_id: str, is_authenticated=Depends(authenticate)):
     LOGGER.info(f"Request to get_stats_for_bettor {internal_id}")
     if is_authenticated:
-        if request and request.refresh:
-            LOGGER.info(f"Refresh stats requested")
-            hedge_service.refresh_stats_for_bettor(internal_id)
         stats = hedge_service.get_stats_for_bettor(internal_id)
-        if stats is None or len(stats) == 0:
+        if stats is None:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"No stats found for {internal_id}",
             )
         else:
             return {"stats": stats}
-
-
-@app.get("/v1/bettors/stats/refresh")
-def refresh_stats_all(is_authenticated=Depends(authenticate)):
-    LOGGER.info("Request to refresh_stats_all")
-    if is_authenticated:
-        hedge_service.refresh_stats_all()
-
-
-@app.get("/v1/bettors/stats")
-def get_stats_all(is_authenticated=Depends(authenticate)):
-    LOGGER.info(f"Request to get_stats_all")
-    if is_authenticated:
-        stats = hedge_service.get_stats_all()
-        if stats is None or len(stats) == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="No stats found",
-            )
-        else:
-            return {"stats": stats}
-
-
-@app.get("/v1/bettors/{internal_id}/history")
-def get_history_for_bettor(
-    internal_id: str,
-    request: GetStatsForBettorRequest = None,
-    is_authenticated=Depends(authenticate),
-):
-    LOGGER.info(f"Request to get_history_for_bettor {internal_id}")
-    if is_authenticated:
-        if request and request.refresh:
-            LOGGER.info(f"Refresh stats requested")
-            hedge_service.refresh_stats_for_bettor(internal_id)
-        history = hedge_service.get_history_for_bettor(internal_id)
-        if history is None or len(history) == 0:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"No history found for {internal_id}",
-            )
-        else:
-            return {"history": history}
 
 
 @app.post("/v1/bettors/link")
