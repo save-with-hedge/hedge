@@ -13,10 +13,10 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
-from service.hedge_service import HedgeService
-from models.api.api_models import CreateAccountLinkRequest
-from repository.mongo_repository import MongoRepository
-from utils.log import get_logger
+from app.service.hedge_service import HedgeService
+from app.models.api.api_models import CreateAccountLinkRequest
+from app.repository.mongo_repository import MongoRepository
+from app.utils.log import get_logger
 
 
 LOGGER = get_logger("HedgeController")

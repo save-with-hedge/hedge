@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import List, Dict, Any
 
-from models.hedge_betslip import HedgeBetslip, Result
-from utils.log import get_logger
+from app.models.hedge_betslip import HedgeBetslip, Result
+from app.utils.log import get_logger
 
 LOGGER = get_logger("FormatBetSlips")
 

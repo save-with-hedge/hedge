@@ -1,6 +1,6 @@
 import logging
 
-from utils.path_anchor import PROJECT_ROOT
+from app.utils.path_anchor import PROJECT_ROOT
 
 
 def get_logger(name):
