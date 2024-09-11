@@ -37,7 +37,7 @@ def refresh_betslips_daily():
     if os.path.exists(lock_file):
         return
     else:
-        with open(lock_file, "w") as f:
+        with open(lock_file, "w") as _:
             pass
     try:
         LOGGER.info("Starting daily betslip refresh job...")
