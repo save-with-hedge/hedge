@@ -69,7 +69,7 @@ async def lifespan(app: FastAPI):
 allowed_origins = [
     "http://localhost:3000",
     "https://savewithvercel.app",
-    "https://www.savewithco",
+    "https://www.savewithhedge.co",
 ]
 
 app.add_middleware(
