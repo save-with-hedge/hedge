@@ -10,8 +10,24 @@ from http import HTTPStatus
 from pytest import fixture
 from unittest.mock import patch
 
+
+@patch("app.repository.mongo_repository.MongoRepository")
+def mock_repository(mock_mongo_repository):
+    mock_instance = mock_mongo_repository.return_value
+    return mock_instance
+
+
+@patch("app.service.hedge_service.HedgeService")
+def mock_service(mock_hedge_service):
+    mock_instance = mock_hedge_service.return_value
+    return mock_instance
+
+
 from app.hedge import app
 from app.repository.mongo_repository import MongoRepository
+from app.utils.log import get_logger
+
+LOGGER = get_logger("TestHedge")
 
 VERSION = "v1"
 client = TestClient(app)
