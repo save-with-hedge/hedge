@@ -69,7 +69,7 @@ async def lifespan(app: FastAPI):
 allowed_origins = [
     "http://localhost:3000",
     "https://savewithvercel.app",
-    "https://www.savewithco",
+    "https://www.savewithhedge.co",
 ]
 
 app.add_middleware(
@@ -159,7 +159,7 @@ def get_stats_for_bettor(internal_id: str, is_authenticated=Depends(authenticate
 def create_account_link(
     is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
 ):
-    LOGGER.info(f"Request to create_account_link ${request}")
+    LOGGER.info(f"Request to create_account_link {request}")
     if is_authenticated:
         if request is None:
             raise HTTPException(

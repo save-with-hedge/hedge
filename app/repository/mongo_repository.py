@@ -114,7 +114,7 @@ class MongoRepository:
             MONGO_ADMINS_COLLECTION, {"username": username, "password": password}
         )
         if is_admin:
-            LOGGER.info("Mongo: User authenticated as admin")
+            LOGGER.debug("Mongo: User authenticated as admin")
             return True
         LOGGER.info("Mongo failed to authenticate user as admin")
         return False

@@ -8,8 +8,10 @@ from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from http import HTTPStatus
 from pytest import fixture
+from unittest.mock import patch
 
 from app.hedge import app
+from app.repository.mongo_repository import MongoRepository
 
 VERSION = "v1"
 client = TestClient(app)
@@ -31,21 +33,26 @@ class TestHedge:
         assert response.status_code == HTTPStatus.OK
         assert response.json() == {"message": "Ping successful!"}
 
-    def test_auth_success(self, valid_auth_header):
+    @patch.object(MongoRepository, "is_admin")
+    def test_auth_success(self, mock_is_admin):
+        mock_is_admin.return_value = True
         route = f"{VERSION}/test-auth"
-        response = client.get(route, headers={"Authorization": valid_auth_header})
+        auth_token = generate_basic_auth_token(username="user", password="pwd")
+        response = client.get(route, headers={"Authorization": auth_token})
         assert response.status_code == HTTPStatus.OK
         assert response.json() == {"message": "Successfully authenticated!"}
+
+    @patch.object(MongoRepository, "is_admin")
+    def test_auth_failure(self, mock_is_admin):
+        mock_is_admin.return_value = False
+        route = f"{VERSION}/test-auth"
+        auth_token = generate_basic_auth_token(username="user", password="pwd")
+        response = client.get(route, headers={"Authorization": auth_token})
+        assert response.status_code == HTTPStatus.UNAUTHORIZED
 
     def test_auth_no_creds(self):
         route = f"{VERSION}/test-auth"
         response = client.get(route)
-        assert response.status_code == HTTPStatus.UNAUTHORIZED
-
-    def test_auth_invalid_creds(self):
-        route = f"{VERSION}/test-auth"
-        invalid_auth_header = generate_basic_auth_token(username="bad_user", password="pwd")
-        response = client.get(route, headers={"Authorization": invalid_auth_header})
         assert response.status_code == HTTPStatus.UNAUTHORIZED
 
 
