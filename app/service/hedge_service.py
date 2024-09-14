@@ -1,24 +1,24 @@
 import datetime
 from typing import Dict, Tuple, List, Any
 
-from models.api.api_models import CreateAccountLinkRequest
-from models.hedge_betslip import HedgeBetslip
-from repository.drive_repository import DriveRepository
-from repository.mongo_repository import MongoRepository
-from scripts.calculate_stats import calculate_stats
-from scripts.fetch_betslips import fetch_betslips
-from scripts.format_betslips import format_betslips
-from service.sharp_sports_service import SharpSportsService
-from utils.betslip_utils import filter_betslips_by_timestamp, get_wtd_delta
-from utils.constants import (
+from app.models.api.api_models import CreateAccountLinkRequest
+from app.models.hedge_betslip import HedgeBetslip
+from app.repository.drive_repository import DriveRepository
+from app.repository.mongo_repository import MongoRepository
+from app.scripts.calculate_stats import calculate_stats
+from app.scripts.fetch_betslips import fetch_betslips
+from app.scripts.format_betslips import format_betslips
+from app.service.sharp_sports_service import SharpSportsService
+from app.utils.betslip_utils import filter_betslips_by_timestamp, get_wtd_delta
+from app.utils.constants import (
     BOOK_REGIONS_HEDGE_FILENAME,
     MONGO_BETSLIPS_COLLECTION,
     MONGO_STATS_COLLECTION,
 )
-from utils.user_utils import get_internal_id
-from utils.path_anchor import BOOK_INFO_FOLDER, STATS_FOLDER
-from utils.json_utils import read_json, write_json
-from utils.log import get_logger
+from app.utils.user_utils import get_internal_id
+from app.utils.path_anchor import BOOK_INFO_FOLDER, STATS_FOLDER
+from app.utils.json_utils import read_json, write_json
+from app.utils.log import get_logger
 
 LOGGER = get_logger("HedgeService")
 

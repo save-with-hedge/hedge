@@ -13,10 +13,10 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import HTTPBasic, HTTPBasicCredentials
 from fastapi.middleware.cors import CORSMiddleware
 
-from service.hedge_service import HedgeService
-from models.api.api_models import CreateAccountLinkRequest
-from repository.mongo_repository import MongoRepository
-from utils.log import get_logger
+from app.service.hedge_service import HedgeService
+from app.models.api.api_models import CreateAccountLinkRequest
+from app.repository.mongo_repository import MongoRepository
+from app.utils.log import get_logger
 
 
 LOGGER = get_logger("HedgeController")
@@ -37,7 +37,7 @@ def refresh_betslips_daily():
     if os.path.exists(lock_file):
         return
     else:
-        with open(lock_file, "w") as f:
+        with open(lock_file, "w") as _:
             pass
     try:
         LOGGER.info("Starting daily betslip refresh job...")
@@ -159,7 +159,7 @@ def get_stats_for_bettor(internal_id: str, is_authenticated=Depends(authenticate
 def create_account_link(
     is_authenticated=Depends(authenticate), request: CreateAccountLinkRequest = None
 ):
-    LOGGER.info(f"Request to create_account_link ${request}")
+    LOGGER.info(f"Request to create_account_link {request}")
     if is_authenticated:
         if request is None:
             raise HTTPException(

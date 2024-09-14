@@ -16,9 +16,9 @@ book_info/book_regions_hedge.json file.
 }
 """
 
-from utils.constants import BOOK_REGIONS_HEDGE_FILENAME
-from utils.json_utils import read_json, write_json
-from utils.path_anchor import BOOK_INFO_FOLDER
+from app.utils.constants import BOOK_REGIONS_HEDGE_FILENAME
+from app.utils.json_utils import read_json, write_json
+from app.utils.path_anchor import BOOK_INFO_FOLDER
 
 
 def reformat_book_regions():

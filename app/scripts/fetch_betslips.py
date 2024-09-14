@@ -4,10 +4,10 @@ Usage:
     python3 fetch_betslips.py [user_id (default: ncolosso)]
 """
 
-from service.sharp_sports_service import SharpSportsService
-from utils.json_utils import read_json
-from utils.log import get_logger
-from utils.path_anchor import BETSLIPS_RAW_FOLDER
+from app.service.sharp_sports_service import SharpSportsService
+from app.utils.json_utils import read_json
+from app.utils.log import get_logger
+from app.utils.path_anchor import BETSLIPS_RAW_FOLDER
 
 LOGGER = get_logger(__name__)
 

@@ -1,8 +1,8 @@
 from datetime import datetime
 from typing import List, Dict, Any
 
-from models.hedge_betslip import HedgeBetslip, Result
-from utils.log import get_logger
+from app.models.hedge_betslip import HedgeBetslip, Result
+from app.utils.log import get_logger
 
 LOGGER = get_logger("FormatBetSlips")
 
@@ -23,20 +23,21 @@ def format_betslips(raw_betslips) -> List[HedgeBetslip]:
     return formatted_betslips
 
 
+# TODO add support for push and cashout types
 def format_betslip(raw_betslip: Dict[Any, Any]) -> HedgeBetslip:
     """
     :param raw_betslip: a raw, Sharp Sports betslip
     :return: a HedgeBetslip object
     """
-    betslip_type = _get_attr(raw_betslip, "type", None)
+    betslip_type = raw_betslip.get("type")
     if betslip_type is None:
-        raise Exception("Betslip has no type attribute")
+        raise TypeError("Betslip has no type attribute")
     if betslip_type == "single":
         return get_single_type_hedge_object(raw_betslip)
     elif betslip_type == "parlay":
         return get_parlay_type_hedge_object(raw_betslip)
     else:
-        raise Exception(
+        raise TypeError(
             f"Betslip type {betslip_type} not supported (only single and parlay allowed)"
         )
 
